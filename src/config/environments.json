@@ -1,0 +1,54 @@
+{
+  "_comment": "Prod/preprod filter ve environment validation. Esas menbe: FoundInEnvironment. Sahe yoxdursa/bosdursa, title-daki tege baxilir: defect SIYAHIYA SALINIR, amma warning ile. DR (Disaster Recovery) real defect-lerde tapildi (sahe='DR', title [DR]).",
+  "environments": [
+    {
+      "key": "prod",
+      "tfs_values": [
+        "PROD"
+      ],
+      "title_tags": [
+        "[PROD]"
+      ]
+    },
+    {
+      "key": "preprod",
+      "tfs_values": [
+        "PREPROD"
+      ],
+      "title_tags": [
+        "[PREPROD]"
+      ]
+    },
+    {
+      "key": "dr",
+      "tfs_values": [
+        "DR"
+      ],
+      "title_tags": [
+        "[DR]"
+      ]
+    }
+  ],
+  "match": "case_insensitive_exact",
+  "title_tag_match": "case_insensitive_contains",
+  "filter_behavior": {
+    "include_when_field_matches": true,
+    "include_when_field_missing_but_title_tag_matches": true,
+    "include_when_field_conflicts_with_title": true,
+    "each_result_has": [
+      "env_detected",
+      "env_source",
+      "env_field_value",
+      "env_title_tag",
+      "env_status"
+    ]
+  },
+  "env_status_values": {
+    "ok": "Sahe doludur, deyer duzdur ve title ile uygundur",
+    "field_missing": "Sahe doldurulmayib (sahe yoxdur ve ya bosdur), env title-dan mueyyen edildi",
+    "field_invalid": "Sahede icazeli deyerlerden basqa bir sey yazilib",
+    "mismatch": "Sahe ile title-daki teq biri-birine ziddir (mes. sahe PROD, title [PREPROD])",
+    "undetermined": "Nə sahe, nə title-da env yoxdur - env mueyyen edilmedi",
+    "title_tag_missing": "Sahe duzdur, amma title-da [PROD]/[PREPROD] tegi yoxdur"
+  }
+}

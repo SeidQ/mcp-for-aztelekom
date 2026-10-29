@@ -1,0 +1,135 @@
+{
+  "_comment": "Template Microsoft.VSTS.CMMI.Symptom sahesinde (HTML) axtarilir, Description/ReproSteps bosdur. Placeholder metni qalibsa bolme doldurulmayib sayilir.",
+  "sections": [
+    {
+      "key": "description",
+      "title": "Description / Symptom",
+      "required": true,
+      "aliases": [
+        "Description / Symptom",
+        "Description/Symptom",
+        "Description",
+        "Symptom"
+      ],
+      "placeholder": "[Add detailed description]",
+      "accepts_text_before_first_heading": true
+    },
+    {
+      "key": "preconditions",
+      "title": "Preconditions",
+      "required": true,
+      "aliases": [
+        "Preconditions",
+        "Precondition"
+      ],
+      "placeholder": "[Add any preconditions]"
+    },
+    {
+      "key": "test_data",
+      "title": "Test Data",
+      "required": false,
+      "aliases": [
+        "Test Data"
+      ],
+      "placeholder": "[If exists, unique issue]"
+    },
+    {
+      "key": "str",
+      "title": "STR",
+      "required": true,
+      "aliases": [
+        "STR",
+        "Steps to Reproduce"
+      ],
+      "placeholder": "[First step]",
+      "min_steps": 2
+    },
+    {
+      "key": "expected",
+      "title": "Expected Result",
+      "required": true,
+      "aliases": [
+        "Expected Result",
+        "Expected"
+      ],
+      "placeholder": "[Add expected result as given in requirements]"
+    },
+    {
+      "key": "actual",
+      "title": "Actual Result",
+      "required": true,
+      "aliases": [
+        "Actual Result",
+        "Actual"
+      ],
+      "placeholder": "[Add actual result]"
+    },
+    {
+      "key": "attachments",
+      "title": "Screenshots / Attachments",
+      "required": false,
+      "aliases": [
+        "Screenshots / Attachments",
+        "Screenshots/Attachments",
+        "Screenshots",
+        "Attachments"
+      ],
+      "placeholder": "[Add evidence photo/video]",
+      "satisfied_by_tfs_attachment": true
+    },
+    {
+      "key": "logs",
+      "title": "Supporting Logs/Trace",
+      "required": false,
+      "aliases": [
+        "Supporting Logs/Trace",
+        "Supporting Logs",
+        "Logs"
+      ],
+      "placeholder": "[Any request/response payloads, error messages]"
+    },
+    {
+      "key": "related",
+      "title": "Related Work",
+      "required": false,
+      "aliases": [
+        "Related Work"
+      ],
+      "placeholder": "[Linked parent/child items, requirements]",
+      "satisfied_by_tfs_link": true
+    }
+  ],
+  "environment_check": {
+    "_comment": "Section yoxlamasindan ayri qayda. Detallar environments.json-dadir.",
+    "field": "Microsoft.VSTS.CMMI.FoundInEnvironment",
+    "checks": [
+      {
+        "status": "field_missing",
+        "level": "error",
+        "message": "Found in Environment doldurulmayıb"
+      },
+      {
+        "status": "field_invalid",
+        "level": "error",
+        "message": "Found in Environment dəyəri icazəli siyahıda deyil (PROD / PREPROD)"
+      },
+      {
+        "status": "mismatch",
+        "level": "error",
+        "message": "Found in Environment ilə title-dakı env teqi uyğun deyil"
+      },
+      {
+        "status": "undetermined",
+        "level": "error",
+        "message": "Env nə Found in Environment sahəsində, nə də title-da yazılıb"
+      },
+      {
+        "status": "title_tag_missing",
+        "level": "warning",
+        "message": "Title-da [PROD]/[PREPROD] teqi yoxdur"
+      }
+    ]
+  },
+  "no_heading_level": "ok",
+  "_no_heading_comment": "Description basligi yoxdur amma metn var: 'warning' (default), 'error' ve ya 'ok' (sesiz kec)."
+}

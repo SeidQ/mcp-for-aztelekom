@@ -1,0 +1,112 @@
+{
+  "_comment": "Severity qaydalari (28.10.2026): Acceptance Criteria Table 6 + Contract Exhibit 4 III/IV. tfs_value deyerleri TFS-de real defektlerde gorunub ('1 - Critical', '2 - High', '3 - Medium', '4 - Low'). Severity definition hele yekun deyil (tba) - deyisende yalniz bu fayli yenile.",
+  "required_only_for": ["prod"],
+  "required_note": "Severity is needed only for PROD defects (Environment field contains PROD). Non-PROD defects may leave it empty.",
+  "severities": [
+    {
+      "id": 1,
+      "name": "Critical",
+      "contract_name": "Sev1 Critical",
+      "label": "Critical (Severity 1)",
+      "tfs_value": "1 - Critical",
+      "aliases": ["Critical", "Severity 1", "Sev1", "1 - Critical"],
+      "summary": "Process stopped / application down / major function broken; no workaround; data destroyed or at risk.",
+      "guidelines": [
+        "Processes are stopped (e.g. the application is down or a major function is not working)",
+        "Application processes are stopped and the schedule impact will result in a severe delay to the software being deployed into production",
+        "Aztelekom cannot continue until the problem is resolved",
+        "No workaround is available",
+        "Data is destroyed or at risk"
+      ],
+      "sla": {"mode": "24x7", "reaction_hours": 1, "resolution_hours": 7,
+              "with_workaround_full_fix_calendar_days": 10, "penalty": true,
+              "text": "Reaction 1 h, resolution/workaround 7 h (with workaround: full fix within 10 calendar days), 24x7"}
+    },
+    {
+      "id": 2,
+      "name": "Major",
+      "contract_name": "Sev2 Major",
+      "label": "Major (Severity 2)",
+      "tfs_value": "2 - High",
+      "aliases": ["Major", "High", "Severity 2", "Sev2", "2 - High"],
+      "summary": "Significant partial malfunction; process severely degraded; a workaround exists only if it is resource-intensive.",
+      "guidelines": [
+        "Processes are severely degraded",
+        "Application processes are severely degraded and the schedule impact will result in a severe delay to the Solution being deployed into production",
+        "Where a workaround is available it is resource intensive"
+      ],
+      "sla": {"mode": "24x7", "reaction_hours": 3, "resolution_hours": 24,
+              "with_workaround_full_fix_calendar_days": 15, "penalty": true,
+              "text": "Reaction 3 h, resolution/workaround 24 h (with workaround: full fix within 15 calendar days), 24x7"}
+    },
+    {
+      "id": 3,
+      "name": "Medium",
+      "contract_name": "Sev3 Minor",
+      "label": "Medium (Severity 3)",
+      "tfs_value": "3 - Medium",
+      "aliases": ["Medium", "Minor", "Severity 3", "Sev3", "3 - Medium"],
+      "summary": "Works, but not to specification; an acceptable, cheap workaround exists.",
+      "guidelines": [
+        "Process is operational but functions are not performing to specifications",
+        "Application processes are affected but the issue is not expected to affect the project's delivery into the production environment",
+        "An acceptable workaround is available and is not resource intensive"
+      ],
+      "sla": {"mode": "8x5", "reaction_working_days": 3, "resolution_working_days": 15, "penalty": false,
+              "text": "Reaction 3 working days, resolution 15 working days, 8x5 (09:00-18:00 Baku, Mon-Fri)"}
+    },
+    {
+      "id": 4,
+      "name": "Low",
+      "contract_name": "Sev4/5 Inconvenience",
+      "label": "Low (Severity 4)",
+      "tfs_value": "4 - Low",
+      "aliases": ["Low", "Severity 4", "Sev4", "4 - Low", "Severity 5", "Sev5", "Question", "Inconvenience"],
+      "summary": "Cosmetic / non-functional: alignment, colour, spelling, documentation, help. Sev5 (question) is also logged as 4.",
+      "guidelines": [
+        "The problem is cosmetic in nature",
+        "Examples: functionality not impacted, e.g. button alignment, color, grammar, spelling, report alignment, documentation, help",
+        "Sev5 (question / inconvenience) -> use 4 - Low"
+      ],
+      "sla": {"mode": "8x5", "reaction_working_days": 5, "resolution_working_days": 30, "penalty": false,
+              "text": "Reaction 5 working days, resolution 30 working days, 8x5 (09:00-18:00 Baku, Mon-Fri)"}
+    },
+    {
+      "id": 5,
+      "name": "Enhancement",
+      "contract_name": "Enhancement",
+      "label": "Enhancement",
+      "tfs_value": "Enhancement",
+      "aliases": ["Enhancement", "Change request", "CR"],
+      "summary": "New requirement -> change request, NOT a defect.",
+      "guidelines": [
+        "A change required that is not in the current scope of the project; must be re-evaluated by the project team (new/additional user requirements)",
+        "Suggested enhancements which do not constitute a lack of required functionality",
+        "Should be raised as a change request, not as a defect"
+      ],
+      "sla": null
+    }
+  ],
+  "assessment_tests": [
+    "One subscriber vs systematic: a problem on one subscriber/record pushes the severity down, a systematic problem (all subscribers / every run) pushes it up.",
+    "Wrong billing / payments or customer-facing impact pushes the severity up.",
+    "An acceptable, cheap workaround pushes the severity down; a resource-intensive workaround does not.",
+    "New requirement (not in scope / never specified) -> Enhancement / change request, not a defect."
+  ],
+  "sla_rules": {
+    "applies_to": "PROD only (Environment field contains PROD)",
+    "clock_start": "CreatedDate (registration triggers the SLA, contract IX)",
+    "reaction": "first vendor comment or vendor state change",
+    "resolution_clock": "time in vendor states (Proposed / New / Active / In Progress); paused while Resolved / Ready for Testing; open defects measured to now",
+    "working_hours": "09:00-18:00 Baku, Mon-Fri (holidays from config/holidays.json; empty -> holidays count as working days)",
+    "workaround": "vendor comment mentioning 'workaround' (heuristic)",
+    "severity_used": "CURRENT severity (no history)",
+    "penalties": "contract V: Sev1 / Sev2 only",
+    "cancelled_excluded": true
+  },
+  "heuristics": {
+    "_comment": "Yalniz XEBERDARLIQ ucundur. Acar sozleri ozun elave et/sil.",
+    "cosmetic_keywords": ["typo", "spelling", "grammar", "alignment", "misaligned", "color", "colour", "font", "cosmetic", "spacing"],
+    "blocking_keywords": ["crash", "crashes", "cannot", "can't", "unable", "not working", "blocked", "unhandled", "500"]
+  }
+}

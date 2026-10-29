@@ -1,0 +1,13 @@
+{
+  "_comment": "Real TFS sahe adlari (get_work_item ile yoxlanilib: 330324, 330350).",
+  "fields": {
+    "severity": "Microsoft.VSTS.Common.Severity",
+    "found_in_environment": "Microsoft.VSTS.CMMI.FoundInEnvironment",
+    "template_body": "Microsoft.VSTS.CMMI.Symptom",
+    "template_body_format": "html",
+    "title": "System.Title",
+    "state": "System.State",
+    "created": "System.CreatedDate"
+  },
+  "unused_fields": ["System.Description", "Microsoft.VSTS.TCM.ReproSteps"]
+}

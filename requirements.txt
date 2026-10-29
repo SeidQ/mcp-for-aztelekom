@@ -1,0 +1,12 @@
+mcp[cli]>=1.2.0,<2
+requests
+openpyxl
+requests-ntlm
+Pillow
+pywin32 ; sys_platform == 'win32'
+
+playwright
+
+# BSS API tests (tests/bss_api)
+pytest==8.4.2
+jsonschema==4.26.0

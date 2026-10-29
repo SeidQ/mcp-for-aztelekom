@@ -1,0 +1,239 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "BSS Microservice v1",
+    "description": "This microservice handles version 1 of bss services",
+    "version": "1.0"
+  },
+  "paths": {
+    "/v1/account": {
+      "get": {
+        "tags": ["Accounts"],
+        "summary": "Retrieve Finance Account details",
+        "description": "Returns account information one of the query parameters: AliasNumber, Filed, or AccountNumber. At least one must be provided.",
+        "operationId": "267d6ab2e547021ade6cfc1956121d6b",
+        "parameters": [
+          {"name": "AliasNumber", "in": "query", "required": false, "schema": {"type": "string"}},
+          {"name": "Filed", "in": "query", "required": false, "schema": {"type": "string"}},
+          {"name": "AccountNumber", "in": "query", "required": false, "schema": {"type": "string"}},
+          {"name": "X-Correlation-ID", "in": "header", "description": "Unique ID for tracking the request across services", "required": true, "schema": {"type": "string", "example": "15780365-a85f-42fd-92d8-b83e9534bec5"}}
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {"application/json": {"schema": {"type": "array", "items": {"$ref": "#/components/schemas/Account"}}}}
+          },
+          "400": {"description": "Bad Request", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/ErrorResponse"}}}},
+          "401": {"description": "Unauthorized", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/ErrorResponse"}}}},
+          "500": {"description": "Internal Server Error", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/ErrorResponse"}}}}
+        }
+      }
+    },
+    "/v1/account/{id}": {
+      "get": {
+        "tags": ["Accounts"],
+        "summary": "Get account details by ID",
+        "description": "Returns details of a specific account by ID. Optional 'Fields' query parameter can be used to limit fields in the response.",
+        "operationId": "e061b074f54080c0a23b2bb3fd6206cf",
+        "parameters": [
+          {"name": "id", "in": "path", "description": "Unique identifier of the account", "required": true, "schema": {"type": "string"}},
+          {"name": "Fields", "in": "query", "description": "Comma-separated list of fields to include in the response", "required": false, "schema": {"type": "string", "nullable": true}},
+          {"name": "X-Correlation-ID", "in": "header", "description": "Unique ID for tracking the request", "required": true, "schema": {"type": "string", "example": "15780365-a85f-42fd-92d8-b83e9534bec5"}}
+        ],
+        "responses": {
+          "200": {"description": "Successful response", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Account"}}}},
+          "400": {"description": "Bad Request", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/ErrorResponse"}}}},
+          "401": {"description": "Unauthorized", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/ErrorResponse"}}}},
+          "500": {"description": "Internal Server Error", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/ErrorResponse"}}}}
+        }
+      }
+    },
+    "/v1": {
+      "get": {
+        "tags": ["Info"],
+        "summary": "Retrieve general information about the application",
+        "description": "Returns app name, version and its description",
+        "operationId": "main.index",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "properties": {
+                          "name": {"description": "The name of the app.", "type": "string", "example": "Bss Microservic"},
+                          "version": {"description": "The version of the api.", "type": "string", "example": "v1"},
+                          "desc": {"description": "The version of the api.", "type": "string", "example": "This microservice handles version 1 of bss services"}
+                        },
+                        "type": "object"
+                      }
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/payment": {
+      "get": {
+        "tags": ["Payments"],
+        "summary": "Get payment by Transaction ID or Date",
+        "description": "Returns payment details based on Transaction ID or Date. Both query parameters are optional.",
+        "operationId": "a127f40d918adc228a6115ea5169740a",
+        "parameters": [
+          {"name": "TransactionId", "in": "query", "description": "UUID of the transaction", "required": false, "schema": {"type": "string", "format": "uuid", "nullable": true}},
+          {"name": "Date", "in": "query", "description": "Date of the transaction", "required": false, "schema": {"type": "string", "format": "date", "nullable": true}},
+          {"name": "X-Correlation-ID", "in": "header", "description": "Unique ID for tracking the request", "required": true, "schema": {"type": "string", "example": "15780365-a85f-42fd-92d8-b83e9534bec5"}}
+        ],
+        "responses": {
+          "200": {"description": "Successful response", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Payment"}}}},
+          "201": {"description": "Payment created successfully", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Payment"}}}},
+          "401": {"description": "Unauthorized", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/ErrorResponse"}}}},
+          "500": {"description": "Internal Server Error", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/ErrorResponse"}}}}
+        }
+      },
+      "post": {
+        "tags": ["Payments"],
+        "summary": "Create a new payment",
+        "operationId": "createPayment",
+        "parameters": [
+          {"name": "X-Correlation-ID", "in": "header", "description": "Unique ID for tracking the request", "required": true, "schema": {"type": "string", "example": "15780365-a85f-42fd-92d8-b83e9534bec5"}}
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": ["description", "date", "totalAmount", "accountNumber", "transactionId", "balancingEnabled"],
+                "properties": {
+                  "description": {"type": "string", "example": "string"},
+                  "date": {"type": "string", "format": "date-time", "example": "2025-06-18T07:37:38.818Z"},
+                  "totalAmount": {
+                    "properties": {
+                      "unit": {"type": "string", "enum": ["AZN"], "example": "AZN"},
+                      "value": {"type": "number", "format": "float", "minimum": 0.01, "exclusiveMinimum": true, "example": 10.5}
+                    },
+                    "type": "object"
+                  },
+                  "accountNumber": {"type": "string", "example": "string"},
+                  "transactionId": {"type": "string", "format": "uuid", "example": "3fa85f64-5717-4562-b3fc-2c963f66afa6"},
+                  "additionalDescription": {"type": "string", "example": "string"},
+                  "balancingEnabled": {"type": "boolean", "example": true}
+                },
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {"description": "Payment created successfully", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Payment"}}}},
+          "401": {"description": "Unauthorized", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/ErrorResponse"}}}},
+          "500": {"description": "Internal Server Error", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/ErrorResponse"}}}}
+        }
+      }
+    },
+    "/v1/payment/{id}": {
+      "get": {
+        "tags": ["Payments"],
+        "summary": "Get payment by ID",
+        "description": "Returns detailed information about a specific payment by its ID.",
+        "operationId": "da7eb0610cc885b10886b9c9dab7588f",
+        "parameters": [
+          {"name": "id", "in": "path", "description": "Unique identifier of the payment", "required": true, "schema": {"type": "string"}},
+          {"name": "X-Correlation-ID", "in": "header", "description": "Unique ID for tracking the request", "required": true, "schema": {"type": "string", "example": "15780365-a85f-42fd-92d8-b83e9534bec5"}}
+        ],
+        "responses": {
+          "200": {"description": "Successful response", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Payment"}}}},
+          "401": {"description": "Unauthorized", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/ErrorResponse"}}}},
+          "500": {"description": "Internal Server Error", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/ErrorResponse"}}}}
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Account": {
+        "description": "Inlined twice in the original swagger (GET /v1/account items and GET /v1/account/{id}); identical, extracted here as one component.",
+        "properties": {
+          "id": {"type": "string"},
+          "href": {"type": "string"},
+          "name": {"type": "string"},
+          "accountNumber": {"type": "string"},
+          "aliases": {"type": "array", "items": {"type": "string"}},
+          "accountBalance": {
+            "properties": {
+              "amount": {
+                "properties": {"unit": {"type": "string"}, "value": {"type": "number"}},
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "accountStateItems": {
+            "type": "array",
+            "items": {
+              "properties": {
+                "type": {"type": "string"},
+                "title": {"type": "string"},
+                "side": {"type": "string"},
+                "amount": {"type": "number"},
+                "unbalancedAmount": {"type": "number"},
+                "date": {"type": "string", "format": "date-time"},
+                "dueDate": {"type": "string", "format": "date-time"},
+                "invoiceNumber": {"type": "string"}
+              },
+              "type": "object"
+            }
+          }
+        },
+        "type": "object"
+      },
+      "Payment": {
+        "description": "Inlined four times in the original swagger (GET /v1/payment 200/201, POST 201, GET /v1/payment/{id} 200); identical apart from examples, extracted here as one component.",
+        "properties": {
+          "id": {"type": "string"},
+          "href": {"type": "string"},
+          "description": {"type": "string"},
+          "date": {"type": "string", "format": "date-time"},
+          "totalAmount": {
+            "properties": {"unit": {"type": "string"}, "value": {"type": "number"}},
+            "type": "object"
+          },
+          "accountNumber": {"type": "string"},
+          "transactionId": {"type": "string", "format": "uuid"},
+          "additionalDescription": {"type": "string"},
+          "balanceProcessingStatus": {"type": "string"}
+        },
+        "type": "object"
+      },
+      "ErrorResponse": {
+        "properties": {
+          "code": {"type": "string"},
+          "reason": {"type": "string"},
+          "message": {"type": "string"},
+          "status": {"type": "string"},
+          "referenceError": {"type": "string"},
+          "@baseType": {"type": "string"},
+          "@schemaLocation": {"type": "string"},
+          "@type": {"type": "string"},
+          "additionalProp1": {"type": "string"},
+          "additionalProp2": {"type": "string"},
+          "additionalProp3": {"type": "string"}
+        },
+        "type": "object"
+      }
+    }
+  },
+  "tags": [
+    {"name": "Accounts", "description": "Accounts"},
+    {"name": "Info", "description": "Info"},
+    {"name": "Payments", "description": "Payments"}
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "_comment": "Defekt başlığındakı [Ad Soyad] -> mail. email boş olsa, defekt MONITOR_ME ünvanına gedir. aliases: başlıqlarda adın başqa yazılışları. Böyük/kiçik hərf və Azərbaycan hərfləri (ə=a, ü=u, ş=s ...) fərq etmir.",
+  "people": [
+    {
+      "name": "Solmaz Mammadova",
+      "email": "Solmaz.Mammadova@azercell.com",
+      "aliases": [
+        "Solmaz",
+        "Solmaz Məmmədova",
+        "Solmaz.Mammadova"
+      ]
+    },
+    {
+      "name": "Ulkar Nasirova",
+      "email": "ulkar.nasirova@aztelekom.az",
+      "aliases": [
+        "Ülkər Nəsirova",
+        "Ulkar.Nasirova"
+      ]
+    },
+    {
+      "name": "Nazrin Mammadli",
+      "email": "Nezrin.Memmedli@azercell.com",
+      "aliases": [
+        "Nazrin",
+        "Nəzrin Məmmədli",
+        "Nezrin Memmedli",
+        "Nezrin.Memmedli",
+        "Nazrin.Mammadli"
+      ]
+    },
+    {
+      "name": "Nihad Suleymanov",
+      "email": "nihad.suleymanov@aztelekom.az",
+      "aliases": [
+        "Nihad",
+        "Nihad Süleymanov",
+        "Nihad.Suleymanov"
+      ]
+    },
+    {
+      "name": "Durdana Mammadli",
+      "email": "durdana.mammadli@aztelekom.az",
+      "aliases": [
+        "Durdana",
+        "Dürdanə Məmmədli"
+      ]
+    },
+    {
+      "name": "Ulkar Maharramova",
+      "email": "",
+      "aliases": [
+        "Ulkar.Maharramova",
+        "Ülkər Məhərrəmova"
+      ]
+    },
+    {
+      "name": "Said Gaziyev",
+      "email": "Said.Gaziyev@azercell.com",
+      "aliases": [
+        "Said.Gaziyev",
+        "Seid Qaziyev"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.pyc
+
+# Logs
+*.log
+
+# Backups
+*.bak
+*.bak_*
+
+# Secrets — never commit
+secrets.env
+src/secrets.env
+
+# Runtime state
+state/
+src/state/
+
+# Screenshots / generated artifacts
+artifacts/
+
+# Generated previews and test results
+*_preview.html
+defect_monitor_preview.html
+*_results_*.csv
+
+# BSS API tests: local config (may contain token) and run reports
+tests/bss_api/bss.env
+tests/bss_api/results/
+
+# Local venv + auto-update launcher (run.bat)
+.venv/
+.update.lock/
+.update.log
+.no-autoupdate

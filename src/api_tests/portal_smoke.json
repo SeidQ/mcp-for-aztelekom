@@ -1,0 +1,397 @@
+[
+ {
+  "id": "API-001",
+  "name": "POST /20_0/Integration.webapiservices/rpc/IntegrationData/GetSettings (login page error: 404 expected 200)",
+  "method": "POST",
+  "url": "https://ppwebportal.aztelekom.az/20_0/Integration.webapiservices/rpc/IntegrationData/GetSettings",
+  "body": "token",
+  "expect_status": 200,
+  "expect_contains": [],
+  "expect_json": {},
+  "max_ms": 3000,
+  "no_session": false,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "API-002",
+  "name": "GET /20_0/Portal/rpc/AppData/GetAppResources",
+  "method": "GET",
+  "url": "https://ppwebportal.aztelekom.az/20_0/Portal/rpc/AppData/GetAppResources?culture=en-US",
+  "body": "",
+  "expect_status": 200,
+  "expect_contains": [],
+  "expect_json": {},
+  "max_ms": 3000,
+  "no_session": false,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "API-003",
+  "name": "POST /20_0/Portal/rpc/AppData/GetAppSettings",
+  "method": "POST",
+  "url": "https://ppwebportal.aztelekom.az/20_0/Portal/rpc/AppData/GetAppSettings",
+  "body": "token",
+  "expect_status": 200,
+  "expect_contains": [],
+  "expect_json": {},
+  "max_ms": 3000,
+  "no_session": false,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "API-004",
+  "name": "GET /20_0/Portal/rpc/AppData/GetAppVersion",
+  "method": "GET",
+  "url": "https://ppwebportal.aztelekom.az/20_0/Portal/rpc/AppData/GetAppVersion",
+  "body": "",
+  "expect_status": 200,
+  "expect_contains": [],
+  "expect_json": {},
+  "max_ms": 3000,
+  "no_session": false,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "API-005",
+  "name": "POST /20_0/Portal/rpc/AppData/WriteLogs",
+  "method": "POST",
+  "url": "https://ppwebportal.aztelekom.az/20_0/Portal/rpc/AppData/WriteLogs",
+  "body": "{\"baseContext\": {\"userToken\": \"{{userToken}}\"}, \"data\": {\"logs\": [{\"utcIsoDateTime\": \"2026-10-21T12:31:15.454Z\", \"correlationData\": {\"id\": \"35a4ce73-60be-4180-96ac-0b3339199333\", \"comments\": null, \"name\": \"Web_ErrorLogService\"}, \"message\": \"Cannot read properties of undefined (reading 'focus')\", \"level\": 4, \"source\": \"ErrorLogService\", \"error\": \"TypeError: Cannot read properties of undefined (reading 'focus')\\n    at r.ngAfterViewInit (https://ppwebportal.aztelekom.az/20_0/Portal/chunk-ZB6R7U2E.js:1:3486)\\n    at nf (https://ppwebportal.aztelekom.az/20_0/Portal/chunk-3HMOC4XX.js:4:21176)\\n    at _v (https://ppwebportal.aztelekom.az/20_0/Portal/chunk-3HMOC4XX.js:4:21321)\\n    at Jf (https://ppwebportal.aztelekom.az/20_0/Portal/chunk-3HMOC4XX.js:4:21084)\\n    at Ci (https://ppwebportal.aztelekom.az/20_0/Portal/chunk-3HMOC4XX.js:4:20812)\\n    at WE (https://ppwebportal.aztelekom.az/20_0/Portal/chunk-3HMOC4XX.js:4:61415)\\n    at Ac (https://ppwebportal.aztelekom.az/20_0/Portal/chunk-3HMOC4XX.js:4:62092)\\n    at fh (https://ppwebportal.aztelekom.az/20_0/Portal/chunk-3HMOC4XX.js:4:61924)\\n    at zE (https://ppwebportal.aztelekom.az/20_0/Portal/chunk-3HMOC4XX.js:4:61881)\\n    at ph (https://ppwebportal.aztelekom.az/20_0/Portal/chunk-3HMOC4XX.js:4:62270)\", \"data\": []}]}}",
+  "expect_status": 200,
+  "expect_contains": [],
+  "expect_json": {
+   "error": null
+  },
+  "max_ms": 3000,
+  "no_session": false,
+  "confirm": false,
+  "skip": true
+ },
+ {
+  "id": "API-006",
+  "name": "GET /20_0/Portal/rpc/FeatureFlags",
+  "method": "GET",
+  "url": "https://ppwebportal.aztelekom.az/20_0/Portal/rpc/FeatureFlags",
+  "body": "",
+  "expect_status": 200,
+  "expect_contains": [],
+  "expect_json": {},
+  "max_ms": 3000,
+  "no_session": false,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "API-007",
+  "name": "POST /20_0/customers.webapiservices/rpc/CustomersData/GetSettings",
+  "method": "POST",
+  "url": "https://ppwebportal.aztelekom.az/20_0/customers.webapiservices/rpc/CustomersData/GetSettings",
+  "body": "token",
+  "expect_status": 200,
+  "expect_contains": [],
+  "expect_json": {},
+  "max_ms": 3000,
+  "no_session": false,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "API-008",
+  "name": "POST /20_0/customers.webapiservices/rpc/Permission/GetPermissions",
+  "method": "POST",
+  "url": "https://ppwebportal.aztelekom.az/20_0/customers.webapiservices/rpc/Permission/GetPermissions",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"1da416df-0c87-4647-a4b2-5cc6a9faa157\", \"comments\": null, \"name\": \"Web_Customers_SecurityService_getUserPermissions\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}}",
+  "expect_status": 200,
+  "expect_contains": [],
+  "expect_json": {
+   "error": null
+  },
+  "max_ms": 3000,
+  "no_session": false,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "API-009",
+  "name": "POST /20_0/customers.webapiservices/rpc/Permission/RegisterFunctionUsage",
+  "method": "POST",
+  "url": "https://ppwebportal.aztelekom.az/20_0/customers.webapiservices/rpc/Permission/RegisterFunctionUsage",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"099c31bc-7617-41af-8283-d41615abdde3\", \"comments\": null, \"name\": \"Web_SecurityService_registerFunctionUsage\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": {\"registrationParameters\": {\"macAddress\": \"9BF8F819D588\", \"computerName\": null, \"userName\": \"Said Gaziyev\", \"functions\": [{\"directoryId\": 0, \"id\": -12803, \"name\": null}, {\"directoryId\": 0, \"id\": -14117, \"name\": null}, {\"directoryId\": 0, \"id\": -14118, \"name\": null}, {\"directoryId\": 0, \"id\": -12808, \"name\": null}, {\"directoryId\": 0, \"id\": -12811, \"name\": null}, {\"directoryId\": 0, \"id\": -12810, \"name\": null}, {\"directoryId\": 0, \"id\": -12809, \"name\": null}, {\"directoryId\": 0, \"id\": -14119, \"name\": null}, {\"directoryId\": 0, \"id\": -14122, \"name\": null}, {\"directoryId\": 0, \"id\": -14121, \"name\": null}, {\"directoryId\": 0, \"id\": -14120, \"name\": null}, {\"directoryId\": 0, \"id\": -14125, \"name\": null}, {\"directoryId\": 0, \"id\": -14128, \"name\": null}, {\"directoryId\": 0, \"id\": -14123, \"name\": null}], \"instanceId\": \"c8ee6561-2a1d-48a3-9693-7c4bea9c1e0c\", \"functionsForProduct\": [{\"directoryId\": 0, \"id\": -13552, \"name\": null}, {\"directoryId\": 0, \"id\": -15960, \"name\": null}, {\"directoryId\": 0, \"id\": 2806, \"name\": null}], \"sessionId\": 0}}}",
+  "expect_status": 200,
+  "expect_contains": [],
+  "expect_json": {
+   "error": null
+  },
+  "max_ms": 3000,
+  "no_session": false,
+  "confirm": false,
+  "skip": true
+ },
+ {
+  "id": "API-010",
+  "name": "POST /20_0/customers.webapiservices/rpc/templates/GetDateTimeSettings",
+  "method": "POST",
+  "url": "https://ppwebportal.aztelekom.az/20_0/customers.webapiservices/rpc/templates/GetDateTimeSettings",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"c1cdf194-ece6-410e-a3ff-082fb8904028\", \"comments\": null, \"name\": \"Web_CultureService_loadDateTimeSettings_Customers\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}}",
+  "expect_status": 200,
+  "expect_contains": [],
+  "expect_json": {},
+  "max_ms": 3000,
+  "no_session": false,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "API-011",
+  "name": "POST /20_0/customers.webapiservices/rpc/templates/GetNumberSettings",
+  "method": "POST",
+  "url": "https://ppwebportal.aztelekom.az/20_0/customers.webapiservices/rpc/templates/GetNumberSettings",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"d3cb66dd-7ea2-4a4c-b8d3-897b559ac018\", \"comments\": null, \"name\": \"Web_CultureService_loadNumberSettings_Customers\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}}",
+  "expect_status": 200,
+  "expect_contains": [],
+  "expect_json": {},
+  "max_ms": 3000,
+  "no_session": false,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "API-012",
+  "name": "POST /20_0/payments.webapiservices/rpc/PaymentsData/GetSettings",
+  "method": "POST",
+  "url": "https://ppwebportal.aztelekom.az/20_0/payments.webapiservices/rpc/PaymentsData/GetSettings",
+  "body": "token",
+  "expect_status": 200,
+  "expect_contains": [],
+  "expect_json": {},
+  "max_ms": 3000,
+  "no_session": false,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "API-013",
+  "name": "POST /20_0/payments.webapiservices/rpc/Permission/GetPermissions",
+  "method": "POST",
+  "url": "https://ppwebportal.aztelekom.az/20_0/payments.webapiservices/rpc/Permission/GetPermissions",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"8e0c5397-987b-4134-b7cd-5b7d0ba47b09\", \"comments\": null, \"name\": \"Web_Payments_SecurityService_getUserPermissions\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}}",
+  "expect_status": 200,
+  "expect_contains": [],
+  "expect_json": {
+   "error": null
+  },
+  "max_ms": 3000,
+  "no_session": false,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "API-014",
+  "name": "POST /20_0/payments.webapiservices/rpc/Permission/RegisterFunctionUsage",
+  "method": "POST",
+  "url": "https://ppwebportal.aztelekom.az/20_0/payments.webapiservices/rpc/Permission/RegisterFunctionUsage",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"285e6cc2-6054-48e7-a962-5adf848cef71\", \"comments\": null, \"name\": \"Web_SecurityService_registerFunctionUsage\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": {\"registrationParameters\": {\"macAddress\": \"9BF8F819D588\", \"computerName\": null, \"userName\": \"Said Gaziyev\", \"functions\": [], \"instanceId\": \"c8ee6561-2a1d-48a3-9693-7c4bea9c1e0c\", \"functionsForProduct\": [{\"directoryId\": 0, \"id\": 2780, \"name\": null}], \"sessionId\": 0}}}",
+  "expect_status": 200,
+  "expect_contains": [],
+  "expect_json": {
+   "error": null
+  },
+  "max_ms": 3000,
+  "no_session": false,
+  "confirm": false,
+  "skip": true
+ },
+ {
+  "id": "API-015",
+  "name": "POST /20_0/payments.webapiservices/rpc/templates/GetDateTimeSettings",
+  "method": "POST",
+  "url": "https://ppwebportal.aztelekom.az/20_0/payments.webapiservices/rpc/templates/GetDateTimeSettings",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"0a4418ee-2737-4fcd-a65f-ed2a486ee3d0\", \"comments\": null, \"name\": \"Web_CultureService_loadDateTimeSettings_Payments\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}}",
+  "expect_status": 200,
+  "expect_contains": [],
+  "expect_json": {},
+  "max_ms": 3000,
+  "no_session": false,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "API-016",
+  "name": "POST /20_0/payments.webapiservices/rpc/templates/GetNumberSettings",
+  "method": "POST",
+  "url": "https://ppwebportal.aztelekom.az/20_0/payments.webapiservices/rpc/templates/GetNumberSettings",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"31a50d22-6824-450b-af00-a8fda809fa6f\", \"comments\": null, \"name\": \"Web_CultureService_loadNumberSettings_Payments\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}}",
+  "expect_status": 200,
+  "expect_contains": [],
+  "expect_json": {},
+  "max_ms": 3000,
+  "no_session": false,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "API-017",
+  "name": "POST /20_0/vouchermanagement.webapiservices/rpc/Permission/GetPermissions",
+  "method": "POST",
+  "url": "https://ppwebportal.aztelekom.az/20_0/vouchermanagement.webapiservices/rpc/Permission/GetPermissions",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"1dcb4f3a-9beb-46d8-8971-a5dca59d7d2a\", \"comments\": null, \"name\": \"Web_VoucherManagement_SecurityService_getUserPermissions\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}}",
+  "expect_status": 200,
+  "expect_contains": [],
+  "expect_json": {
+   "error": null
+  },
+  "max_ms": 3000,
+  "no_session": false,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "API-018",
+  "name": "POST /20_0/vouchermanagement.webapiservices/rpc/Permission/RegisterFunctionUsage",
+  "method": "POST",
+  "url": "https://ppwebportal.aztelekom.az/20_0/vouchermanagement.webapiservices/rpc/Permission/RegisterFunctionUsage",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"b81c45c1-5f6a-4ad4-90f7-4bc02edb172c\", \"comments\": null, \"name\": \"Web_SecurityService_registerFunctionUsage\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": {\"registrationParameters\": {\"macAddress\": \"9BF8F819D588\", \"computerName\": null, \"userName\": \"Said Gaziyev\", \"functions\": [{\"directoryId\": 0, \"id\": -12803, \"name\": null}, {\"directoryId\": 0, \"id\": -14117, \"name\": null}, {\"directoryId\": 0, \"id\": -14118, \"name\": null}, {\"directoryId\": 0, \"id\": -12808, \"name\": null}, {\"directoryId\": 0, \"id\": -12811, \"name\": null}, {\"directoryId\": 0, \"id\": -12810, \"name\": null}, {\"directoryId\": 0, \"id\": -12809, \"name\": null}, {\"directoryId\": 0, \"id\": -14119, \"name\": null}, {\"directoryId\": 0, \"id\": -14122, \"name\": null}, {\"directoryId\": 0, \"id\": -14121, \"name\": null}, {\"directoryId\": 0, \"id\": -14120, \"name\": null}, {\"directoryId\": 0, \"id\": -14125, \"name\": null}, {\"directoryId\": 0, \"id\": -14128, \"name\": null}, {\"directoryId\": 0, \"id\": -14123, \"name\": null}], \"instanceId\": \"c8ee6561-2a1d-48a3-9693-7c4bea9c1e0c\", \"functionsForProduct\": [], \"sessionId\": 0}}}",
+  "expect_status": 200,
+  "expect_contains": [],
+  "expect_json": {
+   "error": null
+  },
+  "max_ms": 3000,
+  "no_session": false,
+  "confirm": false,
+  "skip": true
+ },
+ {
+  "id": "API-019",
+  "name": "POST /20_0/vouchermanagement.webapiservices/rpc/VoucherManagementData/GetSettings",
+  "method": "POST",
+  "url": "https://ppwebportal.aztelekom.az/20_0/vouchermanagement.webapiservices/rpc/VoucherManagementData/GetSettings",
+  "body": "token",
+  "expect_status": 200,
+  "expect_contains": [],
+  "expect_json": {},
+  "max_ms": 3000,
+  "no_session": false,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "API-020",
+  "name": "POST /20_0/vouchermanagement.webapiservices/rpc/templates/GetDateTimeSettings",
+  "method": "POST",
+  "url": "https://ppwebportal.aztelekom.az/20_0/vouchermanagement.webapiservices/rpc/templates/GetDateTimeSettings",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"1e041c0c-3e8b-4df7-9cfa-ef5393781dcc\", \"comments\": null, \"name\": \"Web_CultureService_loadDateTimeSettings_VoucherManagement\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}}",
+  "expect_status": 200,
+  "expect_contains": [],
+  "expect_json": {},
+  "max_ms": 3000,
+  "no_session": false,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "API-021",
+  "name": "POST /20_0/vouchermanagement.webapiservices/rpc/templates/GetNumberSettings",
+  "method": "POST",
+  "url": "https://ppwebportal.aztelekom.az/20_0/vouchermanagement.webapiservices/rpc/templates/GetNumberSettings",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"f09b6758-b9ec-4676-aa9d-0f01baec38d3\", \"comments\": null, \"name\": \"Web_CultureService_loadNumberSettings_VoucherManagement\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}}",
+  "expect_status": 200,
+  "expect_contains": [],
+  "expect_json": {},
+  "max_ms": 3000,
+  "no_session": false,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "NEG-001",
+  "name": "GetPermissions with INVALID token -> must not return permissions",
+  "method": "POST",
+  "url": "https://ppwebportal.aztelekom.az/20_0/customers.webapiservices/rpc/Permission/GetPermissions",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"1da416df-0c87-4647-a4b2-5cc6a9faa157\", \"comments\": null, \"name\": \"Web_Customers_SecurityService_getUserPermissions\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}}",
+  "no_session": true,
+  "expect_status": [
+   200,
+   401,
+   403
+  ],
+  "expect_not_contains": [
+   "availableFunctionsRdns"
+  ],
+  "expect_json": {
+   "error": "*exists*"
+  },
+  "max_ms": 3000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "NEG-002",
+  "name": "GetPermissions without token -> must not return permissions",
+  "method": "POST",
+  "url": "https://ppwebportal.aztelekom.az/20_0/customers.webapiservices/rpc/Permission/GetPermissions",
+  "body": "{\"baseContext\":{\"userData\":{\"cultureName\":\"en-US\"}}}",
+  "no_session": true,
+  "expect_status": [
+   200,
+   401,
+   403
+  ],
+  "expect_not_contains": [
+   "availableFunctionsRdns"
+  ],
+  "max_ms": 3000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "NEG-003",
+  "name": "Invalid token -> HTTP 401/403 expected (REST practice)",
+  "method": "POST",
+  "url": "https://ppwebportal.aztelekom.az/20_0/customers.webapiservices/rpc/Permission/GetPermissions",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"1da416df-0c87-4647-a4b2-5cc6a9faa157\", \"comments\": null, \"name\": \"Web_Customers_SecurityService_getUserPermissions\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}}",
+  "no_session": true,
+  "expect_status": [
+   401,
+   403
+  ],
+  "max_ms": 3000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "NEG-004",
+  "name": "POST without Content-Type/body -> 4xx",
+  "method": "POST",
+  "url": "https://ppwebportal.aztelekom.az/20_0/customers.webapiservices/rpc/Permission/GetPermissions",
+  "body": "",
+  "no_session": false,
+  "expect_status": [
+   400,
+   415
+  ],
+  "max_ms": 3000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "POS-001",
+  "name": "GetPermissions with session token returns permission list",
+  "method": "POST",
+  "url": "https://ppwebportal.aztelekom.az/20_0/customers.webapiservices/rpc/Permission/GetPermissions",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"1da416df-0c87-4647-a4b2-5cc6a9faa157\", \"comments\": null, \"name\": \"Web_Customers_SecurityService_getUserPermissions\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}}",
+  "no_session": false,
+  "expect_status": 200,
+  "expect_json": {
+   "error": null,
+   "result.availableFunctionsRdns": "*exists*"
+  },
+  "max_ms": 3000,
+  "confirm": false,
+  "skip": false
+ }
+]

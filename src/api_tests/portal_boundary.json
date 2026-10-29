@@ -1,0 +1,2705 @@
+[
+ {
+  "id": "BND-001",
+  "name": "Workflow/Permission/GetPermissions | data=null",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workflow.webapiservices/rpc/Permission/GetPermissions",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"22f52a99-f37c-417c-bfa8-1b0f771b04db\", \"comments\": null, \"name\": \"Web_Workflow_SecurityService_getUserPermissions\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": null}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-002",
+  "name": "Workflow/Permission/GetPermissions | data=string (wrong type)",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workflow.webapiservices/rpc/Permission/GetPermissions",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"22f52a99-f37c-417c-bfa8-1b0f771b04db\", \"comments\": null, \"name\": \"Web_Workflow_SecurityService_getUserPermissions\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": \"xxx\"}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-003",
+  "name": "Workflow/Permission/GetPermissions | data=array (wrong type)",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workflow.webapiservices/rpc/Permission/GetPermissions",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"22f52a99-f37c-417c-bfa8-1b0f771b04db\", \"comments\": null, \"name\": \"Web_Workflow_SecurityService_getUserPermissions\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": [1, 2, 3]}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-004",
+  "name": "Workflow/ProcessService/GetPossibleProcessStatuses | data=null",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workflow.webapiservices/rpc/ProcessService/GetPossibleProcessStatuses",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"732d02f3-3d0f-4cc3-9cdf-5eb28910b9ff\", \"comments\": null, \"name\": \"Web_ProcessesListComponent_initFormData\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": null}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-005",
+  "name": "Workflow/ProcessService/GetPossibleProcessStatuses | data=string (wrong type)",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workflow.webapiservices/rpc/ProcessService/GetPossibleProcessStatuses",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"732d02f3-3d0f-4cc3-9cdf-5eb28910b9ff\", \"comments\": null, \"name\": \"Web_ProcessesListComponent_initFormData\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": \"xxx\"}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-006",
+  "name": "Workflow/ProcessService/GetPossibleProcessStatuses | data=array (wrong type)",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workflow.webapiservices/rpc/ProcessService/GetPossibleProcessStatuses",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"732d02f3-3d0f-4cc3-9cdf-5eb28910b9ff\", \"comments\": null, \"name\": \"Web_ProcessesListComponent_initFormData\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": [1, 2, 3]}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-007",
+  "name": "Workflow/ProcessService/GetPossibleReferenceProcesses | data=null",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workflow.webapiservices/rpc/ProcessService/GetPossibleReferenceProcesses",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"732d02f3-3d0f-4cc3-9cdf-5eb28910b9ff\", \"comments\": null, \"name\": \"Web_ProcessesListComponent_initFormData\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": null}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-008",
+  "name": "Workflow/ProcessService/GetPossibleReferenceProcesses | data=string (wrong type)",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workflow.webapiservices/rpc/ProcessService/GetPossibleReferenceProcesses",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"732d02f3-3d0f-4cc3-9cdf-5eb28910b9ff\", \"comments\": null, \"name\": \"Web_ProcessesListComponent_initFormData\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": \"xxx\"}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-009",
+  "name": "Workflow/ProcessService/GetPossibleReferenceProcesses | data=array (wrong type)",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workflow.webapiservices/rpc/ProcessService/GetPossibleReferenceProcesses",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"732d02f3-3d0f-4cc3-9cdf-5eb28910b9ff\", \"comments\": null, \"name\": \"Web_ProcessesListComponent_initFormData\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": [1, 2, 3]}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-010",
+  "name": "Workflow/SubsystemConfiguration/Get | data=null",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workflow.webapiservices/rpc/SubsystemConfiguration/Get",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"f14f4ca7-02aa-4bcd-82a3-f75c78bbeb4e\", \"comments\": null, \"name\": \"Web_WorkerTasksListComponent_ngAfterViewInit\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": null}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-011",
+  "name": "Workflow/SubsystemConfiguration/Get | data=string (wrong type)",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workflow.webapiservices/rpc/SubsystemConfiguration/Get",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"f14f4ca7-02aa-4bcd-82a3-f75c78bbeb4e\", \"comments\": null, \"name\": \"Web_WorkerTasksListComponent_ngAfterViewInit\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": \"xxx\"}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-012",
+  "name": "Workflow/SubsystemConfiguration/Get | data=array (wrong type)",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workflow.webapiservices/rpc/SubsystemConfiguration/Get",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"f14f4ca7-02aa-4bcd-82a3-f75c78bbeb4e\", \"comments\": null, \"name\": \"Web_WorkerTasksListComponent_ngAfterViewInit\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": [1, 2, 3]}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-013",
+  "name": "Workflow/TaskService/GetPossibleTaskStatuses | data=null",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workflow.webapiservices/rpc/TaskService/GetPossibleTaskStatuses",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"cb745885-f0be-4a9e-99e4-e0d1d5016d0d\", \"comments\": null, \"name\": \"Web_WorkerTasksListComponent_initForm\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": null}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-014",
+  "name": "Workflow/TaskService/GetPossibleTaskStatuses | data=string (wrong type)",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workflow.webapiservices/rpc/TaskService/GetPossibleTaskStatuses",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"cb745885-f0be-4a9e-99e4-e0d1d5016d0d\", \"comments\": null, \"name\": \"Web_WorkerTasksListComponent_initForm\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": \"xxx\"}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-015",
+  "name": "Workflow/TaskService/GetPossibleTaskStatuses | data=array (wrong type)",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workflow.webapiservices/rpc/TaskService/GetPossibleTaskStatuses",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"cb745885-f0be-4a9e-99e4-e0d1d5016d0d\", \"comments\": null, \"name\": \"Web_WorkerTasksListComponent_initForm\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": [1, 2, 3]}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-016",
+  "name": "Workflow/dictionary/getdictionaries | data=null",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workflow.webapiservices/rpc/dictionary/getdictionaries",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"732d02f3-3d0f-4cc3-9cdf-5eb28910b9ff\", \"comments\": null, \"name\": \"Web_ProcessesListComponent_initFormData\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": null}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-017",
+  "name": "Workflow/dictionary/getdictionaries | id=999999999 (not found)",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workflow.webapiservices/rpc/dictionary/getdictionaries",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"732d02f3-3d0f-4cc3-9cdf-5eb28910b9ff\", \"comments\": null, \"name\": \"Web_ProcessesListComponent_initFormData\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": {\"attributeId\": {\"directoryId\": 0, \"id\": 999999999, \"name\": null}, \"classId\": {\"directoryId\": 0, \"id\": 999999999, \"name\": null}, \"baseObject\": null}}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400,
+   404
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-018",
+  "name": "Workflow/dictionary/getdictionaries | id=-999999999",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workflow.webapiservices/rpc/dictionary/getdictionaries",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"732d02f3-3d0f-4cc3-9cdf-5eb28910b9ff\", \"comments\": null, \"name\": \"Web_ProcessesListComponent_initFormData\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": {\"attributeId\": {\"directoryId\": 0, \"id\": -999999999, \"name\": null}, \"classId\": {\"directoryId\": 0, \"id\": -999999999, \"name\": null}, \"baseObject\": null}}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400,
+   404
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-019",
+  "name": "Workflow/dictionary/getdictionaries | data=string (wrong type)",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workflow.webapiservices/rpc/dictionary/getdictionaries",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"732d02f3-3d0f-4cc3-9cdf-5eb28910b9ff\", \"comments\": null, \"name\": \"Web_ProcessesListComponent_initFormData\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": \"xxx\"}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-020",
+  "name": "Workflow/dictionary/getdictionaries | data=array (wrong type)",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workflow.webapiservices/rpc/dictionary/getdictionaries",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"732d02f3-3d0f-4cc3-9cdf-5eb28910b9ff\", \"comments\": null, \"name\": \"Web_ProcessesListComponent_initFormData\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": [1, 2, 3]}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-021",
+  "name": "Workflow/dictionary/getdictionaryvalues | data=null",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workflow.webapiservices/rpc/dictionary/getdictionaryvalues",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"732d02f3-3d0f-4cc3-9cdf-5eb28910b9ff\", \"comments\": null, \"name\": \"Web_ProcessesListComponent_initFormData\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": null}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-022",
+  "name": "Workflow/dictionary/getdictionaryvalues | id=999999999 (not found)",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workflow.webapiservices/rpc/dictionary/getdictionaryvalues",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"732d02f3-3d0f-4cc3-9cdf-5eb28910b9ff\", \"comments\": null, \"name\": \"Web_ProcessesListComponent_initFormData\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": {\"attributeId\": {\"directoryId\": 0, \"id\": 999999999, \"name\": null}, \"classId\": {\"directoryId\": 0, \"id\": 999999999, \"name\": null}, \"dictionaryId\": {\"id\": 999999999, \"directoryId\": 0, \"name\": \"Matching context\"}, \"baseObject\": null, \"targetValueIndex\": 1, \"parameters\": []}}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400,
+   404
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-023",
+  "name": "Workflow/dictionary/getdictionaryvalues | id=-999999999",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workflow.webapiservices/rpc/dictionary/getdictionaryvalues",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"732d02f3-3d0f-4cc3-9cdf-5eb28910b9ff\", \"comments\": null, \"name\": \"Web_ProcessesListComponent_initFormData\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": {\"attributeId\": {\"directoryId\": 0, \"id\": -999999999, \"name\": null}, \"classId\": {\"directoryId\": 0, \"id\": -999999999, \"name\": null}, \"dictionaryId\": {\"id\": -999999999, \"directoryId\": 0, \"name\": \"Matching context\"}, \"baseObject\": null, \"targetValueIndex\": 1, \"parameters\": []}}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400,
+   404
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-024",
+  "name": "Workflow/dictionary/getdictionaryvalues | data=string (wrong type)",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workflow.webapiservices/rpc/dictionary/getdictionaryvalues",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"732d02f3-3d0f-4cc3-9cdf-5eb28910b9ff\", \"comments\": null, \"name\": \"Web_ProcessesListComponent_initFormData\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": \"xxx\"}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-025",
+  "name": "Workflow/dictionary/getdictionaryvalues | data=array (wrong type)",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workflow.webapiservices/rpc/dictionary/getdictionaryvalues",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"732d02f3-3d0f-4cc3-9cdf-5eb28910b9ff\", \"comments\": null, \"name\": \"Web_ProcessesListComponent_initFormData\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": [1, 2, 3]}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-026",
+  "name": "Workflow/templates/GetDateTimeSettings | data=null",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workflow.webapiservices/rpc/templates/GetDateTimeSettings",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"81e607bc-c212-4dc2-b863-d8ebbe165b0a\", \"comments\": null, \"name\": \"Web_CultureService_loadDateTimeSettings_Workflow\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": null}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-027",
+  "name": "Workflow/templates/GetDateTimeSettings | data=string (wrong type)",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workflow.webapiservices/rpc/templates/GetDateTimeSettings",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"81e607bc-c212-4dc2-b863-d8ebbe165b0a\", \"comments\": null, \"name\": \"Web_CultureService_loadDateTimeSettings_Workflow\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": \"xxx\"}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-028",
+  "name": "Workflow/templates/GetDateTimeSettings | data=array (wrong type)",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workflow.webapiservices/rpc/templates/GetDateTimeSettings",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"81e607bc-c212-4dc2-b863-d8ebbe165b0a\", \"comments\": null, \"name\": \"Web_CultureService_loadDateTimeSettings_Workflow\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": [1, 2, 3]}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-029",
+  "name": "Workflow/templates/GetNumberSettings | data=null",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workflow.webapiservices/rpc/templates/GetNumberSettings",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"9041384e-6a2c-42f5-a161-b9043c1164ba\", \"comments\": null, \"name\": \"Web_CultureService_loadNumberSettings_Workflow\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": null}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-030",
+  "name": "Workflow/templates/GetNumberSettings | data=string (wrong type)",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workflow.webapiservices/rpc/templates/GetNumberSettings",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"9041384e-6a2c-42f5-a161-b9043c1164ba\", \"comments\": null, \"name\": \"Web_CultureService_loadNumberSettings_Workflow\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": \"xxx\"}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-031",
+  "name": "Workflow/templates/GetNumberSettings | data=array (wrong type)",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workflow.webapiservices/rpc/templates/GetNumberSettings",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"9041384e-6a2c-42f5-a161-b9043c1164ba\", \"comments\": null, \"name\": \"Web_CultureService_loadNumberSettings_Workflow\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": [1, 2, 3]}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-032",
+  "name": "Workflow/templates/getviewtemplates | data=null",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workflow.webapiservices/rpc/templates/getviewtemplates",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"ed760de1-12e0-4ffe-89e8-4b6a474f520b\", \"comments\": null, \"name\": \"Web_TchGrid_getImmutableColumns\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": null}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-033",
+  "name": "Workflow/templates/getviewtemplates | id=999999999 (not found)",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workflow.webapiservices/rpc/templates/getviewtemplates",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"ed760de1-12e0-4ffe-89e8-4b6a474f520b\", \"comments\": null, \"name\": \"Web_TchGrid_getImmutableColumns\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": {\"classId\": null, \"functionId\": {\"directoryId\": 0, \"id\": 999999999, \"name\": null}, \"userId\": {\"systemId\": \"USR\", \"id\": \"//0/.11079915\", \"name\": \"Said Gaziyev\"}}}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400,
+   404
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-034",
+  "name": "Workflow/templates/getviewtemplates | id=-999999999",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workflow.webapiservices/rpc/templates/getviewtemplates",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"ed760de1-12e0-4ffe-89e8-4b6a474f520b\", \"comments\": null, \"name\": \"Web_TchGrid_getImmutableColumns\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": {\"classId\": null, \"functionId\": {\"directoryId\": 0, \"id\": -999999999, \"name\": null}, \"userId\": {\"systemId\": \"USR\", \"id\": \"//0/.11079915\", \"name\": \"Said Gaziyev\"}}}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400,
+   404
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-035",
+  "name": "Workflow/templates/getviewtemplates | data=string (wrong type)",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workflow.webapiservices/rpc/templates/getviewtemplates",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"ed760de1-12e0-4ffe-89e8-4b6a474f520b\", \"comments\": null, \"name\": \"Web_TchGrid_getImmutableColumns\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": \"xxx\"}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-036",
+  "name": "Workflow/templates/getviewtemplates | data=array (wrong type)",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workflow.webapiservices/rpc/templates/getviewtemplates",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"ed760de1-12e0-4ffe-89e8-4b6a474f520b\", \"comments\": null, \"name\": \"Web_TchGrid_getImmutableColumns\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": [1, 2, 3]}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-037",
+  "name": "Workforce/MapContextService/GetMapContext | data=null",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workforce.webapiservices/rpc/MapContextService/GetMapContext",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"c89a054c-7b3d-4534-8c9c-97ba6b11d5ce\", \"comments\": null, \"name\": \"Web_DataService_getBaseRequestContext\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"resourceId\": {\"directoryId\": 0, \"id\": 4132, \"name\": null}, \"databaseVersion\": 0, \"mapViewFunction\": 2, \"data\": null}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-038",
+  "name": "Workforce/MapContextService/GetMapContext | data=string (wrong type)",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workforce.webapiservices/rpc/MapContextService/GetMapContext",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"c89a054c-7b3d-4534-8c9c-97ba6b11d5ce\", \"comments\": null, \"name\": \"Web_DataService_getBaseRequestContext\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"resourceId\": {\"directoryId\": 0, \"id\": 4132, \"name\": null}, \"databaseVersion\": 0, \"mapViewFunction\": 2, \"data\": \"xxx\"}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-039",
+  "name": "Workforce/MapContextService/GetMapContext | data=array (wrong type)",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workforce.webapiservices/rpc/MapContextService/GetMapContext",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"c89a054c-7b3d-4534-8c9c-97ba6b11d5ce\", \"comments\": null, \"name\": \"Web_DataService_getBaseRequestContext\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"resourceId\": {\"directoryId\": 0, \"id\": 4132, \"name\": null}, \"databaseVersion\": 0, \"mapViewFunction\": 2, \"data\": [1, 2, 3]}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-040",
+  "name": "Workforce/Permission/GetPermissions | data=null",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workforce.webapiservices/rpc/Permission/GetPermissions",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"d6a322d4-3a24-4d4d-9541-b8b273fedc9e\", \"comments\": null, \"name\": \"Web_Workforce_SecurityService_getUserPermissions\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": null}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-041",
+  "name": "Workforce/Permission/GetPermissions | data=string (wrong type)",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workforce.webapiservices/rpc/Permission/GetPermissions",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"d6a322d4-3a24-4d4d-9541-b8b273fedc9e\", \"comments\": null, \"name\": \"Web_Workforce_SecurityService_getUserPermissions\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": \"xxx\"}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-042",
+  "name": "Workforce/Permission/GetPermissions | data=array (wrong type)",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workforce.webapiservices/rpc/Permission/GetPermissions",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"d6a322d4-3a24-4d4d-9541-b8b273fedc9e\", \"comments\": null, \"name\": \"Web_Workforce_SecurityService_getUserPermissions\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": [1, 2, 3]}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-043",
+  "name": "Workforce/StartingProcessActions/GetAllActions | data=null",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workforce.webapiservices/rpc/StartingProcessActions/GetAllActions",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"e2603eb9-d6f3-4cd8-be65-c5489cd07464\", \"comments\": null, \"name\": \"Web_WorkOrdersListComponent_onViewColumnsDefined\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": null}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-044",
+  "name": "Workforce/StartingProcessActions/GetAllActions | data=string (wrong type)",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workforce.webapiservices/rpc/StartingProcessActions/GetAllActions",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"e2603eb9-d6f3-4cd8-be65-c5489cd07464\", \"comments\": null, \"name\": \"Web_WorkOrdersListComponent_onViewColumnsDefined\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": \"xxx\"}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-045",
+  "name": "Workforce/StartingProcessActions/GetAllActions | data=array (wrong type)",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workforce.webapiservices/rpc/StartingProcessActions/GetAllActions",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"e2603eb9-d6f3-4cd8-be65-c5489cd07464\", \"comments\": null, \"name\": \"Web_WorkOrdersListComponent_onViewColumnsDefined\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": [1, 2, 3]}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-046",
+  "name": "Workforce/SubsystemConfiguration/Get | data=null",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workforce.webapiservices/rpc/SubsystemConfiguration/Get",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"e2603eb9-d6f3-4cd8-be65-c5489cd07464\", \"comments\": null, \"name\": \"Web_WorkOrdersListComponent_onViewColumnsDefined\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": null}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-047",
+  "name": "Workforce/SubsystemConfiguration/Get | data=string (wrong type)",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workforce.webapiservices/rpc/SubsystemConfiguration/Get",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"e2603eb9-d6f3-4cd8-be65-c5489cd07464\", \"comments\": null, \"name\": \"Web_WorkOrdersListComponent_onViewColumnsDefined\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": \"xxx\"}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-048",
+  "name": "Workforce/SubsystemConfiguration/Get | data=array (wrong type)",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workforce.webapiservices/rpc/SubsystemConfiguration/Get",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"e2603eb9-d6f3-4cd8-be65-c5489cd07464\", \"comments\": null, \"name\": \"Web_WorkOrdersListComponent_onViewColumnsDefined\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": [1, 2, 3]}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-049",
+  "name": "Workforce/WorkersService/GetDivisionsByAttributes | data=null",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workforce.webapiservices/rpc/WorkersService/GetDivisionsByAttributes",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"34b7decc-0ea4-4076-8d7e-5cdadeb7935a\", \"comments\": null, \"name\": \"Web_createWorkOrdersSearchForm_initDivisions\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": null}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-050",
+  "name": "Workforce/WorkersService/GetDivisionsByAttributes | data=string (wrong type)",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workforce.webapiservices/rpc/WorkersService/GetDivisionsByAttributes",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"34b7decc-0ea4-4076-8d7e-5cdadeb7935a\", \"comments\": null, \"name\": \"Web_createWorkOrdersSearchForm_initDivisions\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": \"xxx\"}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-051",
+  "name": "Workforce/WorkersService/GetDivisionsByAttributes | data=array (wrong type)",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workforce.webapiservices/rpc/WorkersService/GetDivisionsByAttributes",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"34b7decc-0ea4-4076-8d7e-5cdadeb7935a\", \"comments\": null, \"name\": \"Web_createWorkOrdersSearchForm_initDivisions\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": [1, 2, 3]}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-052",
+  "name": "Workforce/WorkersService/GetPossibleWorkOrderErrors | data=null",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workforce.webapiservices/rpc/WorkersService/GetPossibleWorkOrderErrors",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"0bc12014-2276-4bc9-8f77-766eba74bf92\", \"comments\": null, \"name\": \"Web_createWorkOrdersSearchForm_initErrors\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": null}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-053",
+  "name": "Workforce/WorkersService/GetPossibleWorkOrderErrors | data=string (wrong type)",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workforce.webapiservices/rpc/WorkersService/GetPossibleWorkOrderErrors",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"0bc12014-2276-4bc9-8f77-766eba74bf92\", \"comments\": null, \"name\": \"Web_createWorkOrdersSearchForm_initErrors\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": \"xxx\"}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-054",
+  "name": "Workforce/WorkersService/GetPossibleWorkOrderErrors | data=array (wrong type)",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workforce.webapiservices/rpc/WorkersService/GetPossibleWorkOrderErrors",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"0bc12014-2276-4bc9-8f77-766eba74bf92\", \"comments\": null, \"name\": \"Web_createWorkOrdersSearchForm_initErrors\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": [1, 2, 3]}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-055",
+  "name": "Workforce/WorkersService/GetPossibleWorkOrderStatuses | data=null",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workforce.webapiservices/rpc/WorkersService/GetPossibleWorkOrderStatuses",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"9f99bc11-71bf-43c6-aa22-76df8f4d440c\", \"comments\": null, \"name\": \"Web_createWorkOrdersSearchForm_initStatuses\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": null}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-056",
+  "name": "Workforce/WorkersService/GetPossibleWorkOrderStatuses | data=string (wrong type)",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workforce.webapiservices/rpc/WorkersService/GetPossibleWorkOrderStatuses",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"9f99bc11-71bf-43c6-aa22-76df8f4d440c\", \"comments\": null, \"name\": \"Web_createWorkOrdersSearchForm_initStatuses\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": \"xxx\"}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-057",
+  "name": "Workforce/WorkersService/GetPossibleWorkOrderStatuses | data=array (wrong type)",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workforce.webapiservices/rpc/WorkersService/GetPossibleWorkOrderStatuses",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"9f99bc11-71bf-43c6-aa22-76df8f4d440c\", \"comments\": null, \"name\": \"Web_createWorkOrdersSearchForm_initStatuses\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": [1, 2, 3]}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-058",
+  "name": "Workforce/WorkersService/GetSupervisedWorkOrdersWithItemsByAttributes | data=null",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workforce.webapiservices/rpc/WorkersService/GetSupervisedWorkOrdersWithItemsByAttributes",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"dd57fb4d-de6a-4fcf-9b9e-e6ea14e4d4ff\", \"comments\": null, \"name\": \"Web_WorkOrdersListComponent_onViewColumnsDefined\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": null}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-059",
+  "name": "Workforce/WorkersService/GetSupervisedWorkOrdersWithItemsByAttributes | id=999999999 (not found)",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workforce.webapiservices/rpc/WorkersService/GetSupervisedWorkOrdersWithItemsByAttributes",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"dd57fb4d-de6a-4fcf-9b9e-e6ea14e4d4ff\", \"comments\": null, \"name\": \"Web_WorkOrdersListComponent_onViewColumnsDefined\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": {\"attributes\": [{\"directoryId\": 0, \"id\": 999999999, \"name\": null}, {\"directoryId\": 0, \"id\": 999999999, \"name\": null}, {\"directoryId\": 0, \"id\": 999999999, \"name\": null}, {\"directoryId\": 0, \"id\": 999999999, \"name\": null}, {\"directoryId\": 0, \"id\": 999999999, \"name\": null}, {\"directoryId\": 0, \"id\": 999999999, \"name\": null}, {\"directoryId\": 0, \"id\": 999999999, \"name\": null}, {\"directoryId\": 0, \"id\": 999999999, \"name\": null}, {\"directoryId\": 0, \"id\": 999999999, \"name\": null}, {\"directoryId\": 0, \"id\": 999999999, \"name\": null}, {\"directoryId\": 0, \"id\": 999999999, \"name\": null}, {\"directoryId\": 0, \"id\": 999999999, \"name\": null}, {\"directoryId\": 0, \"id\": 999999999, \"name\": null}, {\"directoryId\": 0, \"id\": 999999999, \"name\": null}, {\"directoryId\": 0, \"id\": 999999999, \"name\": null}, {\"directoryId\": 0, \"id\": 999999999, \"name\": null}, {\"directoryId\": 0, \"id\": 999999999, \"name\": null}, {\"directoryId\": 0, \"id\": 999999999, \"name\": null}, {\"directoryId\": 0, \"id\": 999999999, \"name\": null}, {\"directoryId\": 0, \"id\": 999999999, \"name\": null}, {\"directoryId\": 0, \"id\": 999999999, \"name\": null}, {\"directoryId\": 0, \"id\": 999999999, \"name\": null}, {\"directoryId\": 0, \"id\": 999999999, \"name\": null}, {\"directoryId\": 0, \"id\": 999999999, \"name\": null}, {\"directoryId\": 0, \"id\": 999999999, \"name\": null}, {\"directoryId\": 0, \"id\": 999999999, \"name\": null}, {\"directoryId\": 0, \"id\": 999999999, \"name\": null}, {\"directoryId\": 0, \"id\": 999999999, \"name\": null}, {\"directoryId\": 0, \"id\": 999999999, \"name\": null}, {\"directoryId\": 0, \"id\": 999999999, \"name\": null}, {\"directoryId\": 0, \"id\": 999999999, \"name\": null}, {\"directoryId\": 0, \"id\": 999999999, \"name\": null}, {\"directoryId\": 0, \"id\": 999999999, \"name\": null}], \"name\": \"\", \"statuses\": [{\"directoryId\": 0, \"id\": 999999999, \"name\": \"\"}, {\"directoryId\": 0, \"id\": 999999999, \"name\": \"\"}, {\"directoryId\": 0, \"id\": 999999999, \"name\": \"\"}, {\"directoryId\": 0, \"id\": 999999999, \"name\": \"\"}, {\"directoryId\": 0, \"id\": 999999999, \"name\": \"\"}, {\"directoryId\": 0, \"id\": 999999999, \"name\": \"\"}, {\"directoryId\": 0, \"id\": 999999999, \"name\": \"\"}, {\"directoryId\": 0, \"id\": 999999999, \"name\": \"\"}], \"createdDateFrom\": null, \"createdDateUntil\": null, \"startDateFrom\": null, \"startDateUntil\": null, \"executors\": null, \"divisions\": null, \"id\": null}}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400,
+   404
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-060",
+  "name": "Workforce/WorkersService/GetSupervisedWorkOrdersWithItemsByAttributes | id=-999999999",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workforce.webapiservices/rpc/WorkersService/GetSupervisedWorkOrdersWithItemsByAttributes",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"dd57fb4d-de6a-4fcf-9b9e-e6ea14e4d4ff\", \"comments\": null, \"name\": \"Web_WorkOrdersListComponent_onViewColumnsDefined\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": {\"attributes\": [{\"directoryId\": 0, \"id\": -999999999, \"name\": null}, {\"directoryId\": 0, \"id\": -999999999, \"name\": null}, {\"directoryId\": 0, \"id\": -999999999, \"name\": null}, {\"directoryId\": 0, \"id\": -999999999, \"name\": null}, {\"directoryId\": 0, \"id\": -999999999, \"name\": null}, {\"directoryId\": 0, \"id\": -999999999, \"name\": null}, {\"directoryId\": 0, \"id\": -999999999, \"name\": null}, {\"directoryId\": 0, \"id\": -999999999, \"name\": null}, {\"directoryId\": 0, \"id\": -999999999, \"name\": null}, {\"directoryId\": 0, \"id\": -999999999, \"name\": null}, {\"directoryId\": 0, \"id\": -999999999, \"name\": null}, {\"directoryId\": 0, \"id\": -999999999, \"name\": null}, {\"directoryId\": 0, \"id\": -999999999, \"name\": null}, {\"directoryId\": 0, \"id\": -999999999, \"name\": null}, {\"directoryId\": 0, \"id\": -999999999, \"name\": null}, {\"directoryId\": 0, \"id\": -999999999, \"name\": null}, {\"directoryId\": 0, \"id\": -999999999, \"name\": null}, {\"directoryId\": 0, \"id\": -999999999, \"name\": null}, {\"directoryId\": 0, \"id\": -999999999, \"name\": null}, {\"directoryId\": 0, \"id\": -999999999, \"name\": null}, {\"directoryId\": 0, \"id\": -999999999, \"name\": null}, {\"directoryId\": 0, \"id\": -999999999, \"name\": null}, {\"directoryId\": 0, \"id\": -999999999, \"name\": null}, {\"directoryId\": 0, \"id\": -999999999, \"name\": null}, {\"directoryId\": 0, \"id\": -999999999, \"name\": null}, {\"directoryId\": 0, \"id\": -999999999, \"name\": null}, {\"directoryId\": 0, \"id\": -999999999, \"name\": null}, {\"directoryId\": 0, \"id\": -999999999, \"name\": null}, {\"directoryId\": 0, \"id\": -999999999, \"name\": null}, {\"directoryId\": 0, \"id\": -999999999, \"name\": null}, {\"directoryId\": 0, \"id\": -999999999, \"name\": null}, {\"directoryId\": 0, \"id\": -999999999, \"name\": null}, {\"directoryId\": 0, \"id\": -999999999, \"name\": null}], \"name\": \"\", \"statuses\": [{\"directoryId\": 0, \"id\": -999999999, \"name\": \"\"}, {\"directoryId\": 0, \"id\": -999999999, \"name\": \"\"}, {\"directoryId\": 0, \"id\": -999999999, \"name\": \"\"}, {\"directoryId\": 0, \"id\": -999999999, \"name\": \"\"}, {\"directoryId\": 0, \"id\": -999999999, \"name\": \"\"}, {\"directoryId\": 0, \"id\": -999999999, \"name\": \"\"}, {\"directoryId\": 0, \"id\": -999999999, \"name\": \"\"}, {\"directoryId\": 0, \"id\": -999999999, \"name\": \"\"}], \"createdDateFrom\": null, \"createdDateUntil\": null, \"startDateFrom\": null, \"startDateUntil\": null, \"executors\": null, \"divisions\": null, \"id\": null}}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400,
+   404
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-061",
+  "name": "Workforce/WorkersService/GetSupervisedWorkOrdersWithItemsByAttributes | data=string (wrong type)",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workforce.webapiservices/rpc/WorkersService/GetSupervisedWorkOrdersWithItemsByAttributes",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"dd57fb4d-de6a-4fcf-9b9e-e6ea14e4d4ff\", \"comments\": null, \"name\": \"Web_WorkOrdersListComponent_onViewColumnsDefined\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": \"xxx\"}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-062",
+  "name": "Workforce/WorkersService/GetSupervisedWorkOrdersWithItemsByAttributes | data=array (wrong type)",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workforce.webapiservices/rpc/WorkersService/GetSupervisedWorkOrdersWithItemsByAttributes",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"dd57fb4d-de6a-4fcf-9b9e-e6ea14e4d4ff\", \"comments\": null, \"name\": \"Web_WorkOrdersListComponent_onViewColumnsDefined\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": [1, 2, 3]}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-063",
+  "name": "Workforce/WorkersService/GetSupervisedWorkOrdersWithItemsForMap | data=null",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workforce.webapiservices/rpc/WorkersService/GetSupervisedWorkOrdersWithItemsForMap",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"13d243fe-f6f2-4648-bfa1-3b49a222d67d\", \"comments\": null, \"name\": \"Web_MapWorkOrdersListComponent_ngOnInit\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": null}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-064",
+  "name": "Workforce/WorkersService/GetSupervisedWorkOrdersWithItemsForMap | id=999999999 (not found)",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workforce.webapiservices/rpc/WorkersService/GetSupervisedWorkOrdersWithItemsForMap",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"13d243fe-f6f2-4648-bfa1-3b49a222d67d\", \"comments\": null, \"name\": \"Web_MapWorkOrdersListComponent_ngOnInit\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": {\"attributes\": [{\"directoryId\": 0, \"id\": 999999999, \"name\": null}, {\"directoryId\": 0, \"id\": 999999999, \"name\": null}, {\"directoryId\": 0, \"id\": 999999999, \"name\": null}, {\"directoryId\": 0, \"id\": 999999999, \"name\": null}, {\"directoryId\": 0, \"id\": 999999999, \"name\": null}, {\"directoryId\": 0, \"id\": 999999999, \"name\": null}, {\"directoryId\": 0, \"id\": 999999999, \"name\": null}, {\"directoryId\": 0, \"id\": 999999999, \"name\": null}, {\"directoryId\": 0, \"id\": 999999999, \"name\": null}], \"name\": \"\", \"statuses\": [{\"directoryId\": 0, \"id\": 999999999, \"name\": null}, {\"directoryId\": 0, \"id\": 999999999, \"name\": null}, {\"directoryId\": 0, \"id\": 999999999, \"name\": null}, {\"directoryId\": 0, \"id\": 999999999, \"name\": null}, {\"directoryId\": 0, \"id\": 999999999, \"name\": null}, {\"directoryId\": 0, \"id\": 999999999, \"name\": null}, {\"directoryId\": 0, \"id\": 999999999, \"name\": null}, {\"directoryId\": 0, \"id\": 999999999, \"name\": null}, {\"directoryId\": 0, \"id\": 999999999, \"name\": null}], \"createdDateFrom\": null, \"createdDateUntil\": null, \"startDateFrom\": null, \"startDateUntil\": null, \"executors\": null, \"divisions\": null, \"id\": null}}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400,
+   404
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-065",
+  "name": "Workforce/WorkersService/GetSupervisedWorkOrdersWithItemsForMap | id=-999999999",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workforce.webapiservices/rpc/WorkersService/GetSupervisedWorkOrdersWithItemsForMap",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"13d243fe-f6f2-4648-bfa1-3b49a222d67d\", \"comments\": null, \"name\": \"Web_MapWorkOrdersListComponent_ngOnInit\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": {\"attributes\": [{\"directoryId\": 0, \"id\": -999999999, \"name\": null}, {\"directoryId\": 0, \"id\": -999999999, \"name\": null}, {\"directoryId\": 0, \"id\": -999999999, \"name\": null}, {\"directoryId\": 0, \"id\": -999999999, \"name\": null}, {\"directoryId\": 0, \"id\": -999999999, \"name\": null}, {\"directoryId\": 0, \"id\": -999999999, \"name\": null}, {\"directoryId\": 0, \"id\": -999999999, \"name\": null}, {\"directoryId\": 0, \"id\": -999999999, \"name\": null}, {\"directoryId\": 0, \"id\": -999999999, \"name\": null}], \"name\": \"\", \"statuses\": [{\"directoryId\": 0, \"id\": -999999999, \"name\": null}, {\"directoryId\": 0, \"id\": -999999999, \"name\": null}, {\"directoryId\": 0, \"id\": -999999999, \"name\": null}, {\"directoryId\": 0, \"id\": -999999999, \"name\": null}, {\"directoryId\": 0, \"id\": -999999999, \"name\": null}, {\"directoryId\": 0, \"id\": -999999999, \"name\": null}, {\"directoryId\": 0, \"id\": -999999999, \"name\": null}, {\"directoryId\": 0, \"id\": -999999999, \"name\": null}, {\"directoryId\": 0, \"id\": -999999999, \"name\": null}], \"createdDateFrom\": null, \"createdDateUntil\": null, \"startDateFrom\": null, \"startDateUntil\": null, \"executors\": null, \"divisions\": null, \"id\": null}}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400,
+   404
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-066",
+  "name": "Workforce/WorkersService/GetSupervisedWorkOrdersWithItemsForMap | data=string (wrong type)",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workforce.webapiservices/rpc/WorkersService/GetSupervisedWorkOrdersWithItemsForMap",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"13d243fe-f6f2-4648-bfa1-3b49a222d67d\", \"comments\": null, \"name\": \"Web_MapWorkOrdersListComponent_ngOnInit\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": \"xxx\"}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-067",
+  "name": "Workforce/WorkersService/GetSupervisedWorkOrdersWithItemsForMap | data=array (wrong type)",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workforce.webapiservices/rpc/WorkersService/GetSupervisedWorkOrdersWithItemsForMap",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"13d243fe-f6f2-4648-bfa1-3b49a222d67d\", \"comments\": null, \"name\": \"Web_MapWorkOrdersListComponent_ngOnInit\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": [1, 2, 3]}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-068",
+  "name": "Workforce/WorkersService/GetSupervisedWorkersForMap | data=null",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workforce.webapiservices/rpc/WorkersService/GetSupervisedWorkersForMap",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"556c3e1b-668f-417f-acfc-55b07d2dc3a2\", \"comments\": null, \"name\": \"Web_MapWorkersListComponent_ngOnInit\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": null}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-069",
+  "name": "Workforce/WorkersService/GetSupervisedWorkersForMap | data=string (wrong type)",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workforce.webapiservices/rpc/WorkersService/GetSupervisedWorkersForMap",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"556c3e1b-668f-417f-acfc-55b07d2dc3a2\", \"comments\": null, \"name\": \"Web_MapWorkersListComponent_ngOnInit\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": \"xxx\"}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-070",
+  "name": "Workforce/WorkersService/GetSupervisedWorkersForMap | data=array (wrong type)",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workforce.webapiservices/rpc/WorkersService/GetSupervisedWorkersForMap",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"556c3e1b-668f-417f-acfc-55b07d2dc3a2\", \"comments\": null, \"name\": \"Web_MapWorkersListComponent_ngOnInit\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": [1, 2, 3]}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-071",
+  "name": "Workforce/WorkersService/GetUserWorker | data=null",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workforce.webapiservices/rpc/WorkersService/GetUserWorker",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"4a1e85dc-8c4b-4b4c-8607-d5f19dc38f5b\", \"comments\": null, \"name\": \"Web_WflAppGuard\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": null}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-072",
+  "name": "Workforce/WorkersService/GetUserWorker | data=string (wrong type)",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workforce.webapiservices/rpc/WorkersService/GetUserWorker",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"4a1e85dc-8c4b-4b4c-8607-d5f19dc38f5b\", \"comments\": null, \"name\": \"Web_WflAppGuard\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": \"xxx\"}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-073",
+  "name": "Workforce/WorkersService/GetUserWorker | data=array (wrong type)",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workforce.webapiservices/rpc/WorkersService/GetUserWorker",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"4a1e85dc-8c4b-4b4c-8607-d5f19dc38f5b\", \"comments\": null, \"name\": \"Web_WflAppGuard\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": [1, 2, 3]}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-074",
+  "name": "Workforce/WorkersService/GetWorkOrderItemTemplates | data=null",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workforce.webapiservices/rpc/WorkersService/GetWorkOrderItemTemplates",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"58ea15d2-6580-454e-b545-779e67c7ddf9\", \"comments\": null, \"name\": \"Web_createWorkOrdersSearchForm_initTemplates\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": null}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-075",
+  "name": "Workforce/WorkersService/GetWorkOrderItemTemplates | data=string (wrong type)",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workforce.webapiservices/rpc/WorkersService/GetWorkOrderItemTemplates",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"58ea15d2-6580-454e-b545-779e67c7ddf9\", \"comments\": null, \"name\": \"Web_createWorkOrdersSearchForm_initTemplates\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": \"xxx\"}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-076",
+  "name": "Workforce/WorkersService/GetWorkOrderItemTemplates | data=array (wrong type)",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workforce.webapiservices/rpc/WorkersService/GetWorkOrderItemTemplates",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"58ea15d2-6580-454e-b545-779e67c7ddf9\", \"comments\": null, \"name\": \"Web_createWorkOrdersSearchForm_initTemplates\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": [1, 2, 3]}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-077",
+  "name": "Workforce/WorkersService/GetWorkersByAttributes | data=null",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workforce.webapiservices/rpc/WorkersService/GetWorkersByAttributes",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"7a0dac1e-ee18-43f4-8625-da0b098d6244\", \"comments\": null, \"name\": \"Web_createWorkOrdersSearchForm_initWorkers\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": null}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-078",
+  "name": "Workforce/WorkersService/GetWorkersByAttributes | data=string (wrong type)",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workforce.webapiservices/rpc/WorkersService/GetWorkersByAttributes",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"7a0dac1e-ee18-43f4-8625-da0b098d6244\", \"comments\": null, \"name\": \"Web_createWorkOrdersSearchForm_initWorkers\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": \"xxx\"}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-079",
+  "name": "Workforce/WorkersService/GetWorkersByAttributes | data=array (wrong type)",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workforce.webapiservices/rpc/WorkersService/GetWorkersByAttributes",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"7a0dac1e-ee18-43f4-8625-da0b098d6244\", \"comments\": null, \"name\": \"Web_createWorkOrdersSearchForm_initWorkers\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": [1, 2, 3]}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-080",
+  "name": "Workforce/templates/GetDateTimeSettings | data=null",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workforce.webapiservices/rpc/templates/GetDateTimeSettings",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"b981a7b6-9293-45f3-b8c5-e952e13bd557\", \"comments\": null, \"name\": \"Web_CultureService_loadDateTimeSettings_Workforce\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": null}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-081",
+  "name": "Workforce/templates/GetDateTimeSettings | data=string (wrong type)",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workforce.webapiservices/rpc/templates/GetDateTimeSettings",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"b981a7b6-9293-45f3-b8c5-e952e13bd557\", \"comments\": null, \"name\": \"Web_CultureService_loadDateTimeSettings_Workforce\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": \"xxx\"}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-082",
+  "name": "Workforce/templates/GetDateTimeSettings | data=array (wrong type)",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workforce.webapiservices/rpc/templates/GetDateTimeSettings",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"b981a7b6-9293-45f3-b8c5-e952e13bd557\", \"comments\": null, \"name\": \"Web_CultureService_loadDateTimeSettings_Workforce\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": [1, 2, 3]}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-083",
+  "name": "Workforce/templates/GetNumberSettings | data=null",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workforce.webapiservices/rpc/templates/GetNumberSettings",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"2df41f4d-873e-4aa5-ae72-4309b841c4a3\", \"comments\": null, \"name\": \"Web_CultureService_loadNumberSettings_Workforce\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": null}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-084",
+  "name": "Workforce/templates/GetNumberSettings | data=string (wrong type)",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workforce.webapiservices/rpc/templates/GetNumberSettings",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"2df41f4d-873e-4aa5-ae72-4309b841c4a3\", \"comments\": null, \"name\": \"Web_CultureService_loadNumberSettings_Workforce\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": \"xxx\"}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-085",
+  "name": "Workforce/templates/GetNumberSettings | data=array (wrong type)",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workforce.webapiservices/rpc/templates/GetNumberSettings",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"2df41f4d-873e-4aa5-ae72-4309b841c4a3\", \"comments\": null, \"name\": \"Web_CultureService_loadNumberSettings_Workforce\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": [1, 2, 3]}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-086",
+  "name": "Workforce/templates/getviewtemplates | data=null",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workforce.webapiservices/rpc/templates/getviewtemplates",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"56d2f814-f918-43c9-ac7e-7c6d43a023df\", \"comments\": null, \"name\": \"Web_ViewListComponent_ngOnInit\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": null}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-087",
+  "name": "Workforce/templates/getviewtemplates | id=999999999 (not found)",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workforce.webapiservices/rpc/templates/getviewtemplates",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"56d2f814-f918-43c9-ac7e-7c6d43a023df\", \"comments\": null, \"name\": \"Web_ViewListComponent_ngOnInit\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": {\"classId\": null, \"functionId\": {\"directoryId\": 0, \"id\": 999999999, \"name\": null}, \"userId\": {\"systemId\": \"USR\", \"id\": \"//0/.11079915\", \"name\": \"Said Gaziyev\"}}}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400,
+   404
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-088",
+  "name": "Workforce/templates/getviewtemplates | id=-999999999",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workforce.webapiservices/rpc/templates/getviewtemplates",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"56d2f814-f918-43c9-ac7e-7c6d43a023df\", \"comments\": null, \"name\": \"Web_ViewListComponent_ngOnInit\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": {\"classId\": null, \"functionId\": {\"directoryId\": 0, \"id\": -999999999, \"name\": null}, \"userId\": {\"systemId\": \"USR\", \"id\": \"//0/.11079915\", \"name\": \"Said Gaziyev\"}}}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400,
+   404
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-089",
+  "name": "Workforce/templates/getviewtemplates | data=string (wrong type)",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workforce.webapiservices/rpc/templates/getviewtemplates",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"56d2f814-f918-43c9-ac7e-7c6d43a023df\", \"comments\": null, \"name\": \"Web_ViewListComponent_ngOnInit\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": \"xxx\"}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-090",
+  "name": "Workforce/templates/getviewtemplates | data=array (wrong type)",
+  "method": "POST",
+  "url": "https://ppappwfl.aztelekom.az/20_0/Workforce.webapiservices/rpc/templates/getviewtemplates",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"56d2f814-f918-43c9-ac7e-7c6d43a023df\", \"comments\": null, \"name\": \"Web_ViewListComponent_ngOnInit\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": [1, 2, 3]}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-091",
+  "name": "customers/Permission/GetPermissions | data=null",
+  "method": "POST",
+  "url": "https://ppwebportal.aztelekom.az/20_0/customers.webapiservices/rpc/Permission/GetPermissions",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"1177030b-3aca-4ba2-a062-4646e9b5b81f\", \"comments\": null, \"name\": \"Web_Customers_SecurityService_getUserPermissions\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": null}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-092",
+  "name": "customers/Permission/GetPermissions | data=string (wrong type)",
+  "method": "POST",
+  "url": "https://ppwebportal.aztelekom.az/20_0/customers.webapiservices/rpc/Permission/GetPermissions",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"1177030b-3aca-4ba2-a062-4646e9b5b81f\", \"comments\": null, \"name\": \"Web_Customers_SecurityService_getUserPermissions\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": \"xxx\"}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-093",
+  "name": "customers/Permission/GetPermissions | data=array (wrong type)",
+  "method": "POST",
+  "url": "https://ppwebportal.aztelekom.az/20_0/customers.webapiservices/rpc/Permission/GetPermissions",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"1177030b-3aca-4ba2-a062-4646e9b5b81f\", \"comments\": null, \"name\": \"Web_Customers_SecurityService_getUserPermissions\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": [1, 2, 3]}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-094",
+  "name": "customers/templates/GetDateTimeSettings | data=null",
+  "method": "POST",
+  "url": "https://ppwebportal.aztelekom.az/20_0/customers.webapiservices/rpc/templates/GetDateTimeSettings",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"b79db9a5-b2b0-4742-bf89-f2ed100a85de\", \"comments\": null, \"name\": \"Web_CultureService_loadDateTimeSettings_Customers\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": null}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-095",
+  "name": "customers/templates/GetDateTimeSettings | data=string (wrong type)",
+  "method": "POST",
+  "url": "https://ppwebportal.aztelekom.az/20_0/customers.webapiservices/rpc/templates/GetDateTimeSettings",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"b79db9a5-b2b0-4742-bf89-f2ed100a85de\", \"comments\": null, \"name\": \"Web_CultureService_loadDateTimeSettings_Customers\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": \"xxx\"}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-096",
+  "name": "customers/templates/GetDateTimeSettings | data=array (wrong type)",
+  "method": "POST",
+  "url": "https://ppwebportal.aztelekom.az/20_0/customers.webapiservices/rpc/templates/GetDateTimeSettings",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"b79db9a5-b2b0-4742-bf89-f2ed100a85de\", \"comments\": null, \"name\": \"Web_CultureService_loadDateTimeSettings_Customers\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": [1, 2, 3]}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-097",
+  "name": "customers/templates/GetNumberSettings | data=null",
+  "method": "POST",
+  "url": "https://ppwebportal.aztelekom.az/20_0/customers.webapiservices/rpc/templates/GetNumberSettings",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"92b6a5aa-0b03-4f47-aa6d-7cbbaef6d225\", \"comments\": null, \"name\": \"Web_CultureService_loadNumberSettings_Customers\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": null}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-098",
+  "name": "customers/templates/GetNumberSettings | data=string (wrong type)",
+  "method": "POST",
+  "url": "https://ppwebportal.aztelekom.az/20_0/customers.webapiservices/rpc/templates/GetNumberSettings",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"92b6a5aa-0b03-4f47-aa6d-7cbbaef6d225\", \"comments\": null, \"name\": \"Web_CultureService_loadNumberSettings_Customers\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": \"xxx\"}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-099",
+  "name": "customers/templates/GetNumberSettings | data=array (wrong type)",
+  "method": "POST",
+  "url": "https://ppwebportal.aztelekom.az/20_0/customers.webapiservices/rpc/templates/GetNumberSettings",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"92b6a5aa-0b03-4f47-aa6d-7cbbaef6d225\", \"comments\": null, \"name\": \"Web_CultureService_loadNumberSettings_Customers\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": [1, 2, 3]}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-100",
+  "name": "payments/Permission/GetPermissions | data=null",
+  "method": "POST",
+  "url": "https://ppwebportal.aztelekom.az/20_0/payments.webapiservices/rpc/Permission/GetPermissions",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"c8752735-a0b3-4165-97f7-9d11696dc6f1\", \"comments\": null, \"name\": \"Web_Payments_SecurityService_getUserPermissions\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": null}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-101",
+  "name": "payments/Permission/GetPermissions | data=string (wrong type)",
+  "method": "POST",
+  "url": "https://ppwebportal.aztelekom.az/20_0/payments.webapiservices/rpc/Permission/GetPermissions",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"c8752735-a0b3-4165-97f7-9d11696dc6f1\", \"comments\": null, \"name\": \"Web_Payments_SecurityService_getUserPermissions\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": \"xxx\"}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-102",
+  "name": "payments/Permission/GetPermissions | data=array (wrong type)",
+  "method": "POST",
+  "url": "https://ppwebportal.aztelekom.az/20_0/payments.webapiservices/rpc/Permission/GetPermissions",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"c8752735-a0b3-4165-97f7-9d11696dc6f1\", \"comments\": null, \"name\": \"Web_Payments_SecurityService_getUserPermissions\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": [1, 2, 3]}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-103",
+  "name": "payments/templates/GetDateTimeSettings | data=null",
+  "method": "POST",
+  "url": "https://ppwebportal.aztelekom.az/20_0/payments.webapiservices/rpc/templates/GetDateTimeSettings",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"0f9adbb7-3da5-4d66-9026-63337487486d\", \"comments\": null, \"name\": \"Web_CultureService_loadDateTimeSettings_Payments\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": null}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-104",
+  "name": "payments/templates/GetDateTimeSettings | data=string (wrong type)",
+  "method": "POST",
+  "url": "https://ppwebportal.aztelekom.az/20_0/payments.webapiservices/rpc/templates/GetDateTimeSettings",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"0f9adbb7-3da5-4d66-9026-63337487486d\", \"comments\": null, \"name\": \"Web_CultureService_loadDateTimeSettings_Payments\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": \"xxx\"}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-105",
+  "name": "payments/templates/GetDateTimeSettings | data=array (wrong type)",
+  "method": "POST",
+  "url": "https://ppwebportal.aztelekom.az/20_0/payments.webapiservices/rpc/templates/GetDateTimeSettings",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"0f9adbb7-3da5-4d66-9026-63337487486d\", \"comments\": null, \"name\": \"Web_CultureService_loadDateTimeSettings_Payments\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": [1, 2, 3]}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-106",
+  "name": "payments/templates/GetNumberSettings | data=null",
+  "method": "POST",
+  "url": "https://ppwebportal.aztelekom.az/20_0/payments.webapiservices/rpc/templates/GetNumberSettings",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"b2bf97bf-46b0-4940-b114-fcddc01f7b36\", \"comments\": null, \"name\": \"Web_CultureService_loadNumberSettings_Payments\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": null}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-107",
+  "name": "payments/templates/GetNumberSettings | data=string (wrong type)",
+  "method": "POST",
+  "url": "https://ppwebportal.aztelekom.az/20_0/payments.webapiservices/rpc/templates/GetNumberSettings",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"b2bf97bf-46b0-4940-b114-fcddc01f7b36\", \"comments\": null, \"name\": \"Web_CultureService_loadNumberSettings_Payments\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": \"xxx\"}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-108",
+  "name": "payments/templates/GetNumberSettings | data=array (wrong type)",
+  "method": "POST",
+  "url": "https://ppwebportal.aztelekom.az/20_0/payments.webapiservices/rpc/templates/GetNumberSettings",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"b2bf97bf-46b0-4940-b114-fcddc01f7b36\", \"comments\": null, \"name\": \"Web_CultureService_loadNumberSettings_Payments\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": [1, 2, 3]}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-109",
+  "name": "vouchermanagement/Permission/GetPermissions | data=null",
+  "method": "POST",
+  "url": "https://ppwebportal.aztelekom.az/20_0/vouchermanagement.webapiservices/rpc/Permission/GetPermissions",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"37c0adc2-dbb4-4ac9-8890-48956c7c5825\", \"comments\": null, \"name\": \"Web_VoucherManagement_SecurityService_getUserPermissions\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": null}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-110",
+  "name": "vouchermanagement/Permission/GetPermissions | data=string (wrong type)",
+  "method": "POST",
+  "url": "https://ppwebportal.aztelekom.az/20_0/vouchermanagement.webapiservices/rpc/Permission/GetPermissions",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"37c0adc2-dbb4-4ac9-8890-48956c7c5825\", \"comments\": null, \"name\": \"Web_VoucherManagement_SecurityService_getUserPermissions\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": \"xxx\"}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-111",
+  "name": "vouchermanagement/Permission/GetPermissions | data=array (wrong type)",
+  "method": "POST",
+  "url": "https://ppwebportal.aztelekom.az/20_0/vouchermanagement.webapiservices/rpc/Permission/GetPermissions",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"37c0adc2-dbb4-4ac9-8890-48956c7c5825\", \"comments\": null, \"name\": \"Web_VoucherManagement_SecurityService_getUserPermissions\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": [1, 2, 3]}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-112",
+  "name": "vouchermanagement/templates/GetDateTimeSettings | data=null",
+  "method": "POST",
+  "url": "https://ppwebportal.aztelekom.az/20_0/vouchermanagement.webapiservices/rpc/templates/GetDateTimeSettings",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"eadb6d2c-a7f6-44e0-960d-52275ce6d94d\", \"comments\": null, \"name\": \"Web_CultureService_loadDateTimeSettings_VoucherManagement\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": null}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-113",
+  "name": "vouchermanagement/templates/GetDateTimeSettings | data=string (wrong type)",
+  "method": "POST",
+  "url": "https://ppwebportal.aztelekom.az/20_0/vouchermanagement.webapiservices/rpc/templates/GetDateTimeSettings",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"eadb6d2c-a7f6-44e0-960d-52275ce6d94d\", \"comments\": null, \"name\": \"Web_CultureService_loadDateTimeSettings_VoucherManagement\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": \"xxx\"}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-114",
+  "name": "vouchermanagement/templates/GetDateTimeSettings | data=array (wrong type)",
+  "method": "POST",
+  "url": "https://ppwebportal.aztelekom.az/20_0/vouchermanagement.webapiservices/rpc/templates/GetDateTimeSettings",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"eadb6d2c-a7f6-44e0-960d-52275ce6d94d\", \"comments\": null, \"name\": \"Web_CultureService_loadDateTimeSettings_VoucherManagement\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": [1, 2, 3]}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-115",
+  "name": "vouchermanagement/templates/GetNumberSettings | data=null",
+  "method": "POST",
+  "url": "https://ppwebportal.aztelekom.az/20_0/vouchermanagement.webapiservices/rpc/templates/GetNumberSettings",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"a115fb96-8640-402a-a1d8-6462b7d443b6\", \"comments\": null, \"name\": \"Web_CultureService_loadNumberSettings_VoucherManagement\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": null}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-116",
+  "name": "vouchermanagement/templates/GetNumberSettings | data=string (wrong type)",
+  "method": "POST",
+  "url": "https://ppwebportal.aztelekom.az/20_0/vouchermanagement.webapiservices/rpc/templates/GetNumberSettings",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"a115fb96-8640-402a-a1d8-6462b7d443b6\", \"comments\": null, \"name\": \"Web_CultureService_loadNumberSettings_VoucherManagement\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": \"xxx\"}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ },
+ {
+  "id": "BND-117",
+  "name": "vouchermanagement/templates/GetNumberSettings | data=array (wrong type)",
+  "method": "POST",
+  "url": "https://ppwebportal.aztelekom.az/20_0/vouchermanagement.webapiservices/rpc/templates/GetNumberSettings",
+  "body": "{\"baseContext\": {\"correlationData\": {\"id\": \"a115fb96-8640-402a-a1d8-6462b7d443b6\", \"comments\": null, \"name\": \"Web_CultureService_loadNumberSettings_VoucherManagement\"}, \"userData\": {\"userTokenKey\": \"{{userToken}}\", \"cultureName\": \"en-US\"}}, \"data\": [1, 2, 3]}",
+  "no_session": false,
+  "expect_status": [
+   200,
+   400
+  ],
+  "expect_not_contains": [
+   "StackTrace",
+   "   at System.",
+   "NullReferenceException",
+   "SqlException",
+   "ORA-",
+   "Exception:"
+  ],
+  "max_ms": 8000,
+  "confirm": false,
+  "skip": false
+ }
+]

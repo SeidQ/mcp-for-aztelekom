@@ -1,0 +1,79 @@
+{
+  "manifest_version": "0.4",
+  "name": "aztelekom-tfs",
+  "display_name": "AZTelekom TFS Defects",
+  "version": "1.0.1",
+  "description": "AZTelekom OSS/BSS TFS: defektləri axtarmaq, yaratmaq, yeniləmək, template/severity yoxlaması, due date və RCA hesabatları.",
+  "long_description": "905. AZTelekom OSS and BSS Support layihəsi üçün TFS aləti. Hamı ortaq AZTelekom TFS hesabı ilə işləyir; quraşdırmada daxil etdiyiniz Ad Soyad comment-lərə və yeni defekt başlıqlarına [Ad Soyad] kimi avtomatik əlavə olunur. Silmə alətləri hər dəfə ekranınızda təsdiq pəncərəsi açır.",
+  "author": { "name": "Said Gaziyev (AZTelekom QA)" },
+  "server": {
+    "type": "uv",
+    "entry_point": "server/tfs_mcp_server.py",
+    "mcp_config": {
+      "command": "uv",
+      "args": ["--directory", "${__dirname}", "run", "server/tfs_mcp_server.py"],
+      "env": {
+        "TFS_AUTHOR_NAME": "${user_config.full_name}",
+        "TFS_AUTH": "${user_config.tfs_auth}",
+        "TFS_USER": "${user_config.tfs_user}",
+        "TFS_PASSWORD": "${user_config.tfs_password}",
+        "TFS_SCREENSHOT_DIR": "${user_config.screenshot_dir}",
+        "TFS_VERIFY_SSL": "${user_config.verify_ssl}",
+        "TFS_STATE_FILE": "${HOME}/.aztelekom-tfs/validation_state.json",
+        "TFS_DM_CACHE": "${HOME}/.aztelekom-tfs/dm_cache.json",
+        "TFS_AUDIT_LOG": "${HOME}/.aztelekom-tfs/tfs_delete_audit.log",
+        "TFS_DATA_DIR": "${HOME}/.aztelekom-tfs",
+        "PYTHONIOENCODING": "utf-8"
+      }
+    }
+  },
+  "user_config": {
+    "full_name": {
+      "type": "string",
+      "title": "Ad Soyad",
+      "description": "TFS-də comment-lərə və yeni defekt başlıqlarına [Ad Soyad] kimi yazılır, məs. Nazrin Mammadli.",
+      "required": true
+    },
+    "tfs_user": {
+      "type": "string",
+      "title": "TFS istifadəçi adı",
+      "description": "Ortaq AZTelekom TFS hesabı (komanda rəhbərindən alın).",
+      "required": true
+    },
+    "tfs_password": {
+      "type": "string",
+      "title": "TFS parolu",
+      "description": "Ortaq hesabın parolu. Gizli saxlanılır.",
+      "sensitive": true,
+      "required": true
+    },
+    "tfs_auth": {
+      "type": "string",
+      "title": "Autentifikasiya növü",
+      "description": "ntlm (default), basic və ya pat.",
+      "default": "ntlm",
+      "required": false
+    },
+    "screenshot_dir": {
+      "type": "directory",
+      "title": "Screenshot qovluğu",
+      "description": "add_screenshot / create_defect_full şəkilləri bu qovluqdan götürür.",
+      "default": "${HOME}/Pictures/Screenshots",
+      "required": false
+    },
+    "verify_ssl": {
+      "type": "string",
+      "title": "SSL yoxlaması",
+      "description": "true (default). Yalnız sertifikat xətası olsa false yazın.",
+      "default": "true",
+      "required": false
+    }
+  },
+  "tools_generated": true,
+  "keywords": ["tfs", "azure-devops", "defects", "aztelekom"],
+  "license": "Proprietary",
+  "compatibility": {
+    "platforms": ["win32", "darwin"],
+    "runtimes": { "python": ">=3.10" }
+  }
+}
