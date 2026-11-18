@@ -13,6 +13,7 @@ screenshots.
 | `tfs-defects` / `tfs` | TFS / Azure DevOps defect management: query, create, update and validate work items. | `src\tfs_mcp_server.py` |
 | `portal-ui` | Web portal UI automation (Playwright) against the Aztelekom BSS ContactCenter portal, including API test suites. | `src\portal_mcp_server.py` |
 | `sv-desktop` | SunVizion desktop (WPF) automation via Windows UI Automation. | `src\desktop_mcp_server.py` |
+| `testrail` | TestRail test cases: list, read, create and update (write tools are dry-run by default). | `src\testrail_mcp_server.py` |
 
 ## Supporting tooling
 
@@ -59,25 +60,33 @@ environment variables.
 
 ## Quick install (team members)
 
-Requirements: Windows, [Git](https://git-scm.com), Python 3.11+, Claude desktop, access to the
+Requirements: Windows, [Git](https://git-scm.com), Python 3.11+ (on PATH), Kiro, access to the
 Aztelekom network/VPN. For `sv-desktop` the SunVizion desktop client must also be installed.
 
 ```powershell
-git clone <repo-url> mcp-for-aztelekom
+git clone https://github.com/SeidQ/mcp-for-aztelekom.git
 cd mcp-for-aztelekom
 setup.bat
 ```
 
-`setup.bat` (run once) creates `.venv`, installs the packages and Playwright Chromium, creates
-`src\secrets.env` from `src\secrets.env.example` (fill in your credentials), and registers the three
-servers in the Claude desktop config. Then fully quit Claude desktop (tray icon -> Quit) and reopen it.
+1. `setup.bat` (run once) creates `.venv`, installs the packages and Playwright Chromium, creates
+   `src\secrets.env` from `src\secrets.env.example`, and registers the four servers (`tfs`,
+   `portal-ui`, `testrail`, `sv-desktop`) in `%USERPROFILE%\.kiro\settings\mcp.json`.
+2. Fill in your credentials in `src\secrets.env` (`PORTAL_*`, `TFS_*`, `TESTRAIL_*`) and save.
+3. In Kiro open this folder (File > Open Folder), so the rules in `.kiro\steering\` load, then restart
+   Kiro or reconnect the servers in the MCP panel.
+
+Existing entries in `mcp.json` keep their own settings (`autoApprove`, `timeout`); only `command` and
+`args` are pointed at `run.bat`. New entries get `timeout` 120000 and no `autoApprove`, so Kiro asks
+before each tool call until you add `autoApprove` yourself. If Claude desktop is installed, its config
+is updated too.
 
 ### Automatic updates
 
-The Claude config does not start Python directly; it starts `run.bat portal|tfs|desktop`. Every time
-Claude starts the servers, `run.bat` runs `git pull --ff-only`, reinstalls packages only if
+The Kiro config does not start Python directly; it starts `run.bat portal|tfs|desktop|testrail`. Every
+time Kiro starts the servers, `run.bat` runs `git pull --ff-only`, reinstalls packages only if
 `requirements*.txt` changed, and then starts the server. So after a push to `main`, each user gets the
-new code the next time Claude desktop is restarted - nothing to run by hand.
+new code the next time Kiro is restarted - nothing to run by hand.
 
 - If the pull fails (no VPN, local changes) the server still starts with the current version.
 - Details are logged to `.update.log` (git-ignored).

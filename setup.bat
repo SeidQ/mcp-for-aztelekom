@@ -38,14 +38,15 @@ if not exist "src\secrets.env" (
   echo     src\secrets.env already exists - left untouched
 )
 
-echo [5/5] Registering servers in Claude desktop config ...
+echo [5/5] Registering servers in Kiro config (~/.kiro/settings/mcp.json) ...
 ".venv\Scripts\python.exe" scripts\register_mcp.py || goto fail
 
 echo.
 echo DONE. Now:
-echo   1. Fill src\secrets.env ^(PORTAL_*, TFS_*^) and save it
-echo   2. Fully quit Claude desktop ^(tray icon - Quit^) and open it again
-echo Updates are automatic: every time Claude starts, run.bat does a git pull.
+echo   1. Fill src\secrets.env ^(PORTAL_*, TFS_*, TESTRAIL_*^) and save it
+echo   2. Open THIS folder in Kiro ^(File - Open Folder^) so the steering rules load
+echo   3. Restart Kiro ^(or reconnect the MCP servers in the Kiro MCP panel^)
+echo Updates are automatic: every time Kiro starts the servers, run.bat does a git pull.
 echo.
 pause
 exit /b 0
