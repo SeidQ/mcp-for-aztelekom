@@ -1,18 +1,16 @@
 #!/usr/bin/env python3
 """MCP server for defect automation on Azure DevOps Server (on-prem TFS).
 
-Tools: get_work_item, create_defect, bulk_create_from_csv, query_wiql,
-list_recent_defects, update_status, add_comment, update_fields, export_report_xlsx,
-list_comments, update_comment, delete_comment, clear_fields, str_replace_field,
-delete_work_item, bulk_delete_work_items, restore_work_item, list_deleted_work_items,
-list_attachments, add_attachment, delete_attachment, list_links, add_link, remove_link,
-get_history, assign_to, add_screenshot,
-get_bug_template, get_severity_list, validate_defect, validate_new_defects,
-list_defects_by_environment  (rules: config/*.json + defect_checks.py),
-create_defect_full, reopen_defect (one-call workflows),
-severity_rules, due_dates, rca_status, rca_set, defect_summary (read-only defect manager,
-logic in defect_manager.py).
-DEFAULT list format (query_wiql, list_recent_defects, list_defects_by_environment):
+Tools (merged, action/mode parameter): get_work_item(history=N), query(wiql | env | recent),
+comment(add|list|update|delete), attachment(list|add|delete|screenshot), link(list|add|remove),
+delete_item(delete|bulk_delete|restore|list_deleted), reference(template|severity|rules),
+validate(item_id | new defects)  (rules: config/*.json + defect_checks.py).
+Single tools: bulk_create_from_csv, update_status, update_fields, clear_fields, str_replace_field,
+assign_to, export_report_xlsx, create_defect_full, reopen_defect (one-call workflows),
+due_dates, rca_status, rca_set, defect_summary (read-only defect manager, logic in defect_manager.py).
+The old single-purpose functions (add_comment, list_comments, query_wiql, ...) still exist as plain Python
+functions (defect_monitor.py calls them) but are not registered as MCP tools.
+DEFAULT list format (query):
 ID, Summary, Severity, Assignee, Created Date (Baku time); full=True for all columns.
 
 Config via environment variables (see README section in the chat):
@@ -162,9 +160,9 @@ SERVER_INSTRUCTIONS = """AZTelekom TFS defects. OUTPUT RULES - follow them in EV
    Due Date Changed (times) | Overdue.
 3. RCA / root cause questions -> use rca_status; table: ID | Summary | Severity | Assignee | Created Date |
    RCA - in comment | RCA - Root Cause field (always both columns, separately).
-4. Severity check -> severity_rules + bug text; open PROD defects only (severity is required only for PROD);
+4. Severity check -> reference(kind="rules") + bug text; open PROD defects only (severity is required only for PROD);
    General table + a "Suggested" column for the wrong ones, list the correct ones separately.
-5. Template check -> validate_defect / validate_new_defects; General table + a "Problem" column. Report only:
+5. Template check -> validate (item_id for one bug, none for new defects); General table + a "Problem" column. Report only:
    empty Found in Environment field, empty/placeholder required sections, title not starting with [Name].
    A missing [ENV] or [Module] tag in the title is NOT a problem.
 6. Dates are Baku time (UTC+4). Defects = work item types Bug and Aztelekom Bug.
@@ -2052,8 +2050,8 @@ def reopen_defect(
     return out
 
 
-if __name__ == "__main__":
-    mcp.run()
+# (mcp.run() faylın sonuna köçürüldü: əvvəl burada idi və aşağıdakı DEFECT MANAGER alətləri
+#  qeydiyyatdan keçmirdi.)
 
 # ======================================================================
 # DEFECT MANAGER (28.10.2026): default list format, due dates, RCA, reopen, SLA, next move.
@@ -2445,3 +2443,152 @@ def defect_summary(item_id: int, max_thread: int = 30) -> dict:
         "fetched_at_baku": _dm.baku(datetime.utcnow()),
         "url": _item_url(item_id),
     }
+
+
+# ======================================================================
+# TOOL MERGE (token qənaəti): oxşar alətlər `action`/`mode` parametrli tək alətdə birləşdirildi.
+# Köhnə funksiyalar OLDUĞU KİMİ qalır (defect_monitor.py onları birbaşa çağırır), yalnız MCP
+# qeydiyyatından çıxarılır. Silmə/yazma qoruması (_gate, dry_run) funksiyaların içindədir.
+# ======================================================================
+def _bad_action(name, action, allowed):
+    return {"error": f"{name}: unknown action '{action}'", "allowed": list(allowed)}
+
+
+def _m_get_work_item(item_id: int, full: bool = False, history: int = 0):
+    """Bug oxu. history=N > 0 olarsa son N dəyişiklik tarixçəsini qaytarır (full işləmir)."""
+    if history and history > 0:
+        return get_history(item_id, history)
+    return get_work_item(item_id, full)
+
+
+def _m_comment(action: str, item_id: int, text: str = "", comment_id: int = 0,
+               screenshot: str = "", top: int = 200, dry_run: bool = True):
+    """Comment-lər. action: add (text, screenshot) | list (top) | update (comment_id, text, screenshot) |
+    delete (comment_id, dry_run=True default)."""
+    a = (action or "").strip().lower()
+    if a == "add":
+        return add_comment(item_id, text, screenshot)
+    if a == "list":
+        return list_comments(item_id, top)
+    if a in ("update", "delete") and not comment_id:
+        return {"error": f"comment: action '{a}' requires comment_id"}
+    if a == "update":
+        return update_comment(item_id, comment_id, text, screenshot)
+    if a == "delete":
+        return delete_comment(item_id, comment_id, dry_run)
+    return _bad_action("comment", action, ["add", "list", "update", "delete"])
+
+
+def _m_attachment(action: str, item_id: int, file_path: str = "", attachment_id: str = "",
+                  comment: str = "", source: str = "clipboard", target: str = "symptom",
+                  dry_run: bool = True):
+    """Qoşmalar. action: list | add (file_path, comment) | delete (attachment_id, dry_run=True default) |
+    screenshot (source='clipboard'|path, target='symptom', comment, dry_run=True default)."""
+    a = (action or "").strip().lower()
+    if a == "list":
+        return list_attachments(item_id)
+    if a == "add":
+        return add_attachment(item_id, file_path, comment)
+    if a == "delete":
+        if not attachment_id:
+            return {"error": "attachment: action 'delete' requires attachment_id"}
+        return delete_attachment(item_id, attachment_id, dry_run)
+    if a == "screenshot":
+        return add_screenshot(item_id, source, target, comment, dry_run)
+    return _bad_action("attachment", action, ["list", "add", "delete", "screenshot"])
+
+
+def _m_link(action: str, item_id: int, target_id: int = 0, link_type: str = "related",
+            comment: str = "", url: str = "", rel: str = "", dry_run: bool = True):
+    """Link-lər. action: list | add (target_id, link_type='related', comment) |
+    remove (target_id | url | rel, dry_run=True default)."""
+    a = (action or "").strip().lower()
+    if a == "list":
+        return list_links(item_id)
+    if a == "add":
+        if not target_id:
+            return {"error": "link: action 'add' requires target_id"}
+        return add_link(item_id, target_id, link_type, comment)
+    if a == "remove":
+        return remove_link(item_id, target_id, url, rel, dry_run)
+    return _bad_action("link", action, ["list", "add", "remove"])
+
+
+def _m_delete_item(action: str, item_id: int = 0, item_ids: str = "", destroy: bool = False,
+                   confirm_id: int = 0, dry_run: bool = True, top: int = 50):
+    """Silmə/bərpa. action: delete (item_id, destroy, confirm_id, dry_run=True default) |
+    bulk_delete (item_ids='1,2,3', dry_run=True default) | restore (item_id) | list_deleted (top)."""
+    a = (action or "").strip().lower()
+    if a == "list_deleted":
+        return list_deleted_work_items(top)
+    if a == "bulk_delete":
+        return bulk_delete_work_items(item_ids, dry_run)
+    if a in ("delete", "restore") and not item_id:
+        return {"error": f"delete_item: action '{a}' requires item_id"}
+    if a == "delete":
+        return delete_work_item(item_id, destroy, confirm_id, dry_run)
+    if a == "restore":
+        return restore_work_item(item_id)
+    return _bad_action("delete_item", action, ["delete", "bulk_delete", "restore", "list_deleted"])
+
+
+def _m_reference(kind: str):
+    """Sabit məlumat. kind: template (bug şablonu) | severity (severity siyahısı) | rules (severity qaydaları)."""
+    k = (kind or "").strip().lower()
+    if k == "template":
+        return get_bug_template()
+    if k == "severity":
+        return get_severity_list()
+    if k == "rules":
+        return severity_rules()
+    return _bad_action("reference", kind, ["template", "severity", "rules"])
+
+
+def _m_validate(item_id: int = 0, full_run: bool = False, since: str = "",
+                mark_checked: bool = True, max_report: int = 50):
+    """Şablon yoxlaması. item_id verilibsə tək bug; verilməyibsə yeni bug-lar (full_run, since, mark_checked, max_report)."""
+    if item_id:
+        return validate_defect(item_id)
+    return validate_new_defects(full_run, since, mark_checked, max_report)
+
+
+def _m_query(wiql: str = "", env: str = "", days: int = 0, state: str = "", top: int = 200,
+             full: bool = False, with_validation: bool = False):
+    """Bug siyahısı. wiql verilibsə WIQL; env verilibsə mühitə görə (days default 30, with_validation);
+    əks halda son dəyişənlər (days default 7, state)."""
+    if wiql:
+        return query_wiql(wiql, top, full)
+    if env:
+        return list_defects_by_environment(env, days or 30, state, top, with_validation, full)
+    return list_recent_defects(days or 7, state, top, full)
+
+
+_MERGED_AWAY = [
+    "get_history", "create_defect",
+    "add_comment", "list_comments", "update_comment", "delete_comment",
+    "list_attachments", "add_attachment", "delete_attachment", "add_screenshot",
+    "list_links", "add_link", "remove_link",
+    "delete_work_item", "bulk_delete_work_items", "restore_work_item", "list_deleted_work_items",
+    "get_bug_template", "get_severity_list", "severity_rules",
+    "validate_defect", "validate_new_defects",
+    "query_wiql", "list_recent_defects", "list_defects_by_environment",
+    "get_work_item",
+]
+for _n in _MERGED_AWAY:
+    try:
+        mcp.remove_tool(_n)
+    except Exception:  # noqa: BLE001 - alət yoxdursa (məs. severity_rules əvvəl qeydiyyatsız idi)
+        pass
+
+mcp.add_tool(_m_get_work_item, name="get_work_item")
+mcp.add_tool(_m_comment, name="comment")
+mcp.add_tool(_m_attachment, name="attachment")
+mcp.add_tool(_m_link, name="link")
+mcp.add_tool(_m_delete_item, name="delete_item")
+mcp.add_tool(_m_reference, name="reference")
+mcp.add_tool(_m_validate, name="validate")
+mcp.add_tool(_m_query, name="query")
+
+
+if __name__ == "__main__":
+    mcp.run()

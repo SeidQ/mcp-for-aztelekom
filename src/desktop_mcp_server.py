@@ -1190,5 +1190,135 @@ def desk_close(force: bool = False) -> str:
     return "Bağlandı." if not _pids() else "Pəncərə bağlanmadı (dialoq açıq ola bilər) - desk_windows ilə baxın."
 
 
+# ======================================================================
+# TOOL MERGE (token qənaəti): oxşar alətlər `action`/`mode` parametrli tək alətdə birləşdirildi.
+# Köhnə desk_* funksiyaları (@ui sarğısı ilə) modul qlobalında OLDUĞU KİMİ qalır (desk_batch onlara birbaşa
+# müraciət edir). Yalnız MCP qeydiyyatından çıxarılır. Birləşmiş alətlər @ui ilə SARILMIR: içindəki köhnə
+# funksiya özü UIA thread növbəsini idarə edir.
+# ======================================================================
+def _first_line(fn):
+    d = (getattr(fn, "__doc__", "") or "").strip().splitlines()
+    return d[0].strip()[:170] if d else ""
+
+
+def _mk_doc(header, parts):
+    return header + "\n" + "\n".join(f"- {k}: {_first_line(f)}" for k, f in parts.items())
+
+
+def _bad_mode(name, value, allowed):
+    return f"XƏTA {name}: naməlum '{value}'. İcazəli: {', '.join(allowed)}"
+
+
+def _m_desk_session(action: str, login: bool = True, mode: str = "", project: str = "", app: str = "",
+                    profile: str = "", wait: int = 40, force: bool = False) -> str:
+    a = (action or "").strip().lower()
+    if a == "start":
+        return desk_start(login, mode, project, app, profile)
+    if a == "status":
+        return desk_start_status(wait)
+    if a == "login":
+        return desk_login()
+    if a == "close":
+        return desk_close(force)
+    return _bad_mode("desk_session.action", action, ["start", "status", "login", "close"])
+
+
+_m_desk_session.__doc__ = (
+    _mk_doc("Proqram sessiyası. action: start (login, mode, project, app, profile) | status (wait) | login | close (force).",
+            {"status": desk_start_status, "login": desk_login, "close": desk_close})
+    + "\n\nstart (desk_start) təfərrüatı:\n" + (desk_start.__doc__ or "").strip())
+
+
+def _m_desk_look(mode: str = "windows", window: str = "", text: str = "", control_type: str = "",
+                 limit: int = 40, max_depth: int = 6, only_interactive: bool = False, raw: bool = False) -> str:
+    a = (mode or "").strip().lower()
+    if a == "windows":
+        return desk_windows()
+    if a == "tree":
+        return desk_tree(window, max_depth, only_interactive, raw)
+    if a == "find":
+        return desk_find(text, control_type, window, limit)
+    return _bad_mode("desk_look.mode", mode, ["windows", "tree", "find"])
+
+
+_m_desk_look.__doc__ = _mk_doc(
+    "Pəncərə/element axtarışı. mode: windows | tree (window, max_depth, only_interactive, raw) | find (text, control_type, limit).",
+    {"windows": desk_windows, "tree": desk_tree, "find": desk_find})
+
+
+def _m_desk_act(action: str, target: str = "", value: str = "", window: str = "", control_type: str = "",
+                double: bool = False, right: bool = False, confirm: bool = False, by_label: bool = False,
+                checked: bool = True, x: int = 0, y: int = 0, path: str = "", keys: str = "") -> str:
+    a = (action or "").strip().lower()
+    if a == "click":
+        return desk_click(target, control_type, window, double, right, confirm)
+    if a == "click_xy":
+        return desk_click_xy(x, y, window, double, right, confirm)
+    if a == "set_text":
+        return desk_set_text(target, value, window, by_label)
+    if a == "select":
+        return desk_select(target, value, window, by_label)
+    if a == "check":
+        return desk_check(target, checked, window)
+    if a == "menu":
+        return desk_menu(path, window)
+    if a == "keys":
+        return desk_keys(keys, window)
+    return _bad_mode("desk_act.action", action, ["click", "click_xy", "set_text", "select", "check", "menu", "keys"])
+
+
+_m_desk_act.__doc__ = _mk_doc(
+    "UI əməliyyatı. action: click (target, control_type, double, right, confirm) | click_xy (x, y) | "
+    "set_text (target, value, by_label) | select (target, value) | check (target, checked) | menu (path) | keys (keys).",
+    {"click": desk_click, "click_xy": desk_click_xy, "set_text": desk_set_text, "select": desk_select,
+     "check": desk_check, "menu": desk_menu, "keys": desk_keys})
+
+
+def _m_desk_read(mode: str = "text", target: str = "", window: str = "", max_rows: int = 50,
+                 limit: int = 300) -> str:
+    a = (mode or "").strip().lower()
+    if a == "text":
+        return desk_read_text(window, limit)
+    if a == "grid":
+        return desk_read_grid(target, window, max_rows)
+    return _bad_mode("desk_read.mode", mode, ["text", "grid"])
+
+
+_m_desk_read.__doc__ = _mk_doc(
+    "Ekrandan oxuma. mode: text (window, limit) | grid (target, window, max_rows).",
+    {"text": desk_read_text, "grid": desk_read_grid})
+
+
+def _m_desk_shot(name: str = "screen", window: str = "", scale: float = 1.0, region: str = "",
+                 full_screen: bool = False):
+    if full_screen:
+        return desk_screen(name)
+    return desk_screenshot(name, window, scale, region)
+
+
+_m_desk_shot.__doc__ = ("Screenshot. full_screen=True bütün ekran (yalnız name); əks halda pəncərə/region "
+                        "(window, scale, region).\n" + _first_line(desk_screenshot))
+
+
+_MERGED_AWAY = [
+    "desk_start", "desk_start_status", "desk_login", "desk_close",
+    "desk_windows", "desk_tree", "desk_find",
+    "desk_click", "desk_click_xy", "desk_set_text", "desk_select", "desk_check", "desk_menu", "desk_keys",
+    "desk_read_grid", "desk_read_text",
+    "desk_screen", "desk_screenshot",
+]
+for _n in _MERGED_AWAY:
+    try:
+        mcp.remove_tool(_n)
+    except Exception:  # noqa: BLE001
+        pass
+
+mcp.add_tool(_m_desk_session, name="desk_session")
+mcp.add_tool(_m_desk_look, name="desk_look")
+mcp.add_tool(_m_desk_act, name="desk_act")
+mcp.add_tool(_m_desk_read, name="desk_read")
+mcp.add_tool(_m_desk_shot, name="desk_shot")
+
+
 if __name__ == "__main__":
     mcp.run()

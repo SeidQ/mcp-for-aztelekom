@@ -22,7 +22,7 @@ Due date iki yerdə ola bilər: TFS sahəsi `Microsoft.VSTS.Scheduling.DueDate` 
 
 ## 2. Comment-dən çıxarma
 
-1. Hər bug üçün comment-ləri götür: `list_comments(item_id)`. HTML tag-ləri və `&nbsp;` təmizlə.
+1. Hər bug üçün comment-ləri götür: `comment(action="list", item_id=...)`. HTML tag-ləri və `&nbsp;` təmizlə.
 2. Yalnız tərkibində `due date` olan comment-lər nəzərə alınır (case-insensitive). Məsələn, "missed the deadline" və ya "due to" sayılmır.
 3. Comment-də `due date` sözündən sonra gələn **ilk** tarix götürülür. Formatlar:
    - `dd.mm.yyyy`, məs. `Due date: 28.10.2026`

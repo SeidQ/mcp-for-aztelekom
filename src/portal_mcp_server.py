@@ -2570,5 +2570,192 @@ def portal_batch(steps: Union[str, list], stop_on_error: bool = True, final_scre
     return text
 
 
+# ======================================================================
+# TOOL MERGE (token qənaəti): oxşar alətlər `by`/`action`/`mode` parametrli tək alətdə birləşdirildi.
+# Köhnə funksiyalar (pw/learned/prod_readonly sarğıları ilə) modul qlobalında OLDUĞU KİMİ qalır:
+# portal_batch ({"do":"click_text"}), recipe_run və _LEARN_TOOLS onlara adla müraciət edir. Yalnız MCP
+# qeydiyyatından çıxarılır. Birləşmiş alətlər @pw ilə SARILMIR: içindəki köhnə funksiya özü pw/qoruma/jurnal
+# işini görür (iki qat sarğı olmasın).
+# ======================================================================
+def _first_line(fn):
+    d = (getattr(fn, "__doc__", "") or "").strip().splitlines()
+    return d[0].strip()[:170] if d else ""
+
+
+def _mk_doc(header, parts):
+    return header + "\n" + "\n".join(f"- {k}: {_first_line(f)}" for k, f in parts.items())
+
+
+def _bad_mode(name, value, allowed):
+    return f"XƏTA {name}: naməlum '{value}'. İcazəli: {', '.join(allowed)}"
+
+
+def _m_fill(by: str, value: str, target: str = "", frame: int = 0, index: int = 0, delay_ms: int = 40) -> str:
+    a = (by or "").strip().lower()
+    if a == "label":
+        return fill(target, value, frame)
+    if a == "row":
+        return fill_by_row(target, value, frame, index)
+    if a == "nth":
+        return fill_nth(index, value, frame)
+    if a == "type":
+        return type_text(target, value, frame, index, delay_ms)
+    return _bad_mode("fill.by", by, ["label", "row", "nth", "type"])
+
+
+_m_fill.__doc__ = _mk_doc(
+    "Sahəni doldurur. by: label (target=label) | row (target=row_text, index) | nth (index) | "
+    "type (target=row_text, hərf-hərf yazır, delay_ms).",
+    {"label": fill, "row": fill_by_row, "nth": fill_nth, "type": type_text})
+
+
+def _m_click(target: str = "", by: str = "button", exact: bool = False, frame: int = 0,
+             role: str = "button", nth: int = 0) -> str:
+    a = (by or "").strip().lower()
+    if a == "button":
+        return click(target, exact, frame, role, nth)
+    if a == "text":
+        return click_text(target, exact, frame, nth)
+    if a == "right":
+        return right_click(target, exact, frame, nth)
+    if a == "search":
+        return click_search()
+    return _bad_mode("click.by", by, ["button", "text", "right", "search"])
+
+
+_m_click.__doc__ = _mk_doc(
+    "Klik. by: button (target=ad, role) | text (target=mətn) | right (sağ klik, target=mətn) | search (target lazım deyil).",
+    {"button": click, "text": click_text, "right": right_click, "search": click_search})
+
+
+def _m_inspect(mode: str = "text", frame: int = -2) -> str:
+    a = (mode or "").strip().lower()
+    if a == "text":
+        return read_text(0 if frame == -2 else frame)
+    if a == "page":
+        return inspect_page(-1 if frame == -2 else frame)
+    if a == "state":
+        return current_state()
+    if a == "layout":
+        return check_layout(-1 if frame == -2 else frame)
+    return _bad_mode("inspect.mode", mode, ["text", "page", "state", "layout"])
+
+
+_m_inspect.__doc__ = _mk_doc(
+    "Səhifəni oxuyur. mode: text | page | state | layout (frame: -2 = rejimin default-u).",
+    {"text": read_text, "page": inspect_page, "state": current_state, "layout": check_layout})
+
+
+def _m_recipe(action: str, name: str = "", note: str = "", include_failed: bool = False,
+              stop_on_error: bool = True, allow_confirm: bool = False, shot_suffix: str = "",
+              min_ms: int = 0, only_problems: bool = True, target: str = "", forget: bool = False) -> str:
+    a = (action or "").strip().lower()
+    if a == "start":
+        return recipe_start(name)
+    if a == "save":
+        return recipe_save(name, note, include_failed)
+    if a == "list":
+        return recipe_list()
+    if a == "show":
+        return recipe_show(name)
+    if a == "run":
+        return recipe_run(name, stop_on_error, allow_confirm, shot_suffix)
+    if a == "learn":
+        return learn_report(min_ms, only_problems, target, forget)
+    return _bad_mode("recipe.action", action, ["start", "save", "list", "show", "run", "learn"])
+
+
+_m_recipe.__doc__ = _mk_doc(
+    "Recipe (yazılmış addım ardıcıllığı). action: start | save | list | show | run | learn "
+    "(learn = learn_report: min_ms, only_problems, target, forget).",
+    {"start": recipe_start, "save": recipe_save, "list": recipe_list, "show": recipe_show,
+     "run": recipe_run, "learn": learn_report})
+
+
+def _m_api(action: str, capture_action: str = "start", url_filter: str = "", index: int = -1,
+           text_filter: str = "", max_items: int = 60, body_chars: int = 0, save_cases: str = "",
+           method: str = "", url: str = "", body: str = "", headers: str = "", no_session: bool = False,
+           confirm: bool = False, timeout_ms: int = 30000, file: str = "", only: str = "",
+           out_name: str = "") -> str:
+    a = (action or "").strip().lower()
+    if a == "capture":
+        return api_capture(capture_action, url_filter)
+    if a == "log":
+        return api_log(index, text_filter, max_items, body_chars or 3000)
+    if a == "endpoints":
+        return api_endpoints(save_cases)
+    if a == "call":
+        return api_call(method, url, body, headers, no_session, confirm, timeout_ms, body_chars or 4000)
+    if a == "run_tests":
+        return api_run_tests(file, only, out_name)
+    return _bad_mode("api.action", action, ["capture", "log", "endpoints", "call", "run_tests"])
+
+
+_m_api.__doc__ = _mk_doc(
+    "Portal API. action: capture (capture_action, url_filter) | log (index, text_filter, max_items, body_chars) | "
+    "endpoints (save_cases) | call (method, url, body, headers, no_session, confirm, timeout_ms) | "
+    "run_tests (file, only, out_name).",
+    {"capture": api_capture, "log": api_log, "endpoints": api_endpoints, "call": api_call,
+     "run_tests": api_run_tests})
+
+
+def _m_sv_grid(action: str, text: str = "", grid_index: int = 0, exact: bool = False, nth: int = 0,
+               double: bool = False, select: bool = True, max_rows: int = 200, all_pages: bool = False) -> str:
+    a = (action or "").strip().lower()
+    if a == "read":
+        return sv_grid_read(grid_index, max_rows, all_pages)
+    if a == "open":
+        return sv_open_row(text, grid_index, exact, nth, double)
+    if a == "select":
+        return sv_select_row(text, grid_index, exact, nth, select)
+    return _bad_mode("sv_grid.action", action, ["read", "open", "select"])
+
+
+_m_sv_grid.__doc__ = _mk_doc(
+    "SunVizion grid. action: read (grid_index, max_rows, all_pages) | open (text, double) | select (text, select).",
+    {"read": sv_grid_read, "open": sv_open_row, "select": sv_select_row})
+
+
+def _m_upload(action: str = "upload", file_path: str = "", trigger_text: str = "", frame: int = -1,
+              nth: int = 0, exact: bool = False, large_mb: int = 30) -> str:
+    a = (action or "").strip().lower()
+    if a == "upload":
+        return upload_file(file_path, trigger_text, frame, nth, exact)
+    if a == "list_inputs":
+        return list_file_inputs()
+    if a == "make_files":
+        return make_test_files(large_mb)
+    return _bad_mode("upload.action", action, ["upload", "list_inputs", "make_files"])
+
+
+_m_upload.__doc__ = _mk_doc(
+    "Fayl yükləmə. action: upload (file_path, trigger_text) | list_inputs | make_files (large_mb).",
+    {"upload": upload_file, "list_inputs": list_file_inputs, "make_files": make_test_files})
+
+
+_MERGED_AWAY = [
+    "fill", "fill_by_row", "fill_nth", "type_text",
+    "click", "click_text", "right_click", "click_search",
+    "read_text", "inspect_page", "current_state", "check_layout",
+    "recipe_start", "recipe_save", "recipe_list", "recipe_show", "recipe_run", "learn_report",
+    "api_capture", "api_log", "api_endpoints", "api_call", "api_run_tests",
+    "sv_grid_read", "sv_open_row", "sv_select_row",
+    "upload_file", "list_file_inputs", "make_test_files",
+]
+for _n in _MERGED_AWAY:
+    try:
+        mcp.remove_tool(_n)
+    except Exception:  # noqa: BLE001
+        pass
+
+mcp.add_tool(_m_fill, name="fill")
+mcp.add_tool(_m_click, name="click")
+mcp.add_tool(_m_inspect, name="inspect")
+mcp.add_tool(_m_recipe, name="recipe")
+mcp.add_tool(_m_api, name="api")
+mcp.add_tool(_m_sv_grid, name="sv_grid")
+mcp.add_tool(_m_upload, name="upload")
+
+
 if __name__ == "__main__":
     mcp.run()
