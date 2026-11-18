@@ -203,16 +203,44 @@ def _session():
     return s
 
 
+READ_TIMEOUT = int(os.environ.get("TFS_READ_TIMEOUT", "25"))     # MCP bridge cuts at ~60 s
+WRITE_TIMEOUT = int(os.environ.get("TFS_WRITE_TIMEOUT", "60"))
+READ_RETRIES = int(os.environ.get("TFS_READ_RETRIES", "2"))      # extra attempts, reads only
+_RETRY_STATUS = {429, 500, 502, 503, 504}
+
+
 def _call(method, path, params=None, json_body=None, content_type=None, data=None,
-          allow_redirects=True):
+          allow_redirects=True, read_only=None):
+    """read_only: GET by default; POST queries (wiql, workitemsbatch) pass True. Only read-only calls
+    are retried (429 / 5xx / timeout / connection error) - a write is never sent twice."""
     url = f"{BASE_URL}/{quote(PROJECT)}/_apis/{path}"
     p = {"api-version": API}
     p.update(params or {})
     headers = {"Content-Type": content_type} if content_type else {}
-    r = _session().request(
-        method, url, params=p, json=json_body, data=data, headers=headers, timeout=60,
-        allow_redirects=allow_redirects,
-    )
+    if read_only is None:
+        read_only = method.upper() == "GET" or (
+            method.upper() == "POST" and path in ("wit/wiql", "wit/workitemsbatch"))
+    attempts = 1 + (READ_RETRIES if read_only else 0)
+    for attempt in range(attempts):
+        last = attempt == attempts - 1
+        try:
+            r = _session().request(
+                method, url, params=p, json=json_body, data=data, headers=headers,
+                timeout=READ_TIMEOUT if read_only else WRITE_TIMEOUT, allow_redirects=allow_redirects,
+            )
+        except (requests.Timeout, requests.ConnectionError) as e:
+            if last:
+                raise RuntimeError(f"TFS {method} {path}: {type(e).__name__} after {attempts} attempt(s)") from e
+            time.sleep(1.5 * (attempt + 1))
+            continue
+        if r.status_code in _RETRY_STATUS and not last:
+            try:
+                wait = float(r.headers.get("Retry-After") or 0)
+            except ValueError:
+                wait = 0
+            time.sleep(min(10.0, wait or 1.5 * (attempt + 1)))
+            continue
+        break
     # a redirect on a write call is never a success (requests turns a redirected DELETE/PATCH
     # into a GET, which "succeeds" without changing anything)
     if 300 <= r.status_code < 400:
@@ -258,7 +286,7 @@ def _op_remove(field):
 # Hamı eyni AZTelekom hesabı ilə yazır; real müəllif [Ad Soyad] prefiksindən görünür.
 # TFS_AUTHOR_NAME verilibsə comment-lərə və yeni defekt başlıqlarına avtomatik əlavə olunur.
 _PREFIX_RE = re.compile(r"^\s*(?:<[^>]+>\s*)*\[([^\]]{2,60})\]")
-_NOT_NAME = {"prod", "preprod", "pre-prod", "dr", "uat", "test"}
+_NOT_NAME = {"prod", "preprod", "pre-prod", "stg", "dr", "uat", "test"}
 
 
 def _author_name():
@@ -283,7 +311,7 @@ def _author_title(title):
     if not name:
         return title
     m = _PREFIX_RE.match(title or "")
-    if m and m.group(1).strip().lower() not in _NOT_NAME and not m.group(1).strip().upper().startswith(("PROD", "PREPROD")):
+    if m and m.group(1).strip().lower() not in _NOT_NAME and not m.group(1).strip().upper().startswith(("PROD", "PREPROD", "STG")):
         return title
     return f"[{name}] {title}"
 
@@ -434,16 +462,43 @@ def _name(v):
     return v or ""
 
 
-def _fetch_items(ids):
+def _wq(value):
+    """String value for a WIQL literal ('...'): single quotes doubled."""
+    return str(value).replace("'", "''")
+
+
+_batch_ok = os.environ.get("TFS_USE_BATCH", "true").lower() != "false"
+
+
+def _fetch_batch(ids, field_list):
+    """Work items by id, in the given order. POST wit/workitemsbatch (200 per call); deleted / missing
+    ids are skipped instead of failing the whole call. Falls back to GET wit/workitems (100 per call)
+    if the server does not support the batch endpoint."""
+    global _batch_ok
+    ids = [int(i) for i in ids]
     items = []
+    if _batch_ok:
+        try:
+            for i in range(0, len(ids), 200):
+                res = _call("POST", "wit/workitemsbatch",
+                            json_body={"ids": ids[i : i + 200], "fields": list(field_list), "errorPolicy": "omit"},
+                            content_type="application/json")
+                items.extend(v for v in res.get("value", []) if v)
+            return items
+        except RuntimeError as e:
+            if not re.search(r"TFS (400|404|405)\b", str(e)):
+                raise
+            _batch_ok, items = False, []   # endpoint not available -> GET from now on
     for i in range(0, len(ids), 100):
-        chunk = ids[i : i + 100]
-        res = _call(
-            "GET",
-            "wit/workitems",
-            params={"ids": ",".join(map(str, chunk)), "fields": ",".join(LIST_FIELDS)},
-        )
-        items.extend(res.get("value", []))
+        res = _call("GET", "wit/workitems",
+                    params={"ids": ",".join(map(str, ids[i : i + 100])), "fields": ",".join(field_list),
+                            "errorPolicy": "omit"})
+        items.extend(v for v in res.get("value", []) if v)
+    return items
+
+
+def _fetch_items(ids):
+    items = _fetch_batch(ids, LIST_FIELDS)
     rows = []
     for it in items:
         f = it.get("fields", {})
@@ -480,7 +535,7 @@ def _recent_wiql(days, state=None):
         f"AND [System.ChangedDate] >= @Today - {int(days)} "
     )
     if state:
-        q += f"AND [System.State] = '{state}' "
+        q += f"AND [System.State] = '{_wq(state)}' "
     return q + "ORDER BY [System.ChangedDate] DESC"
 
 
@@ -528,7 +583,7 @@ def create_defect(
     (empty: add the evidence with add_screenshot / add_attachment), Supporting Logs/Trace,
     Related Work. Test Data / Supporting Logs/Trace / Related Work are ALWAYS written; when
     test_data / logs / related are empty they keep the template placeholder text.
-    related: linked parent/child items, requirements (e.g. 'Related to #330196'). environment fills the Found in Environment field (PROD / PREPROD / DR).
+    related: linked parent/child items, requirements (e.g. 'Related to #330196'). environment fills the Found in Environment field (PROD / PREPROD / STG / DR).
     Steps: one per line or separated by ' | '. Severity e.g. '1 - Critical'.
     assigned_to: empty = default assignee Suntech_AZTelekom (env TFS_DEFAULT_ASSIGNEE).
     layout_in_symptom is kept for compatibility and ignored. The result has template_issues
@@ -561,7 +616,7 @@ def bulk_create_from_csv(csv_path: str, dry_run: bool = True) -> dict:
     """Create defects from a CSV. Columns: summary (required), environment, description,
     steps, expected, actual, severity, area_path, iteration_path, assigned_to, tags,
     symptom, preconditions, test_data, logs, related. All defects use the bug template layout in the
-    Symptom field; environment must be PROD / PREPROD / DR (Found in Environment field).
+    Symptom field; environment must be PROD / PREPROD / STG / DR (Found in Environment field).
     dry_run defaults to true: review the preview first, then call again with dry_run=false."""
     created, errors = [], []
     with open(csv_path, newline="", encoding="utf-8-sig") as fh:
@@ -1610,13 +1665,7 @@ def _validation_field_list():
 
 
 def _fetch_raw(ids, field_list):
-    items = []
-    for i in range(0, len(ids), 100):
-        chunk = ids[i : i + 100]
-        res = _call("GET", "wit/workitems",
-                    params={"ids": ",".join(map(str, chunk)), "fields": ",".join(field_list)})
-        items.extend(res.get("value", []))
-    return items
+    return _fetch_batch(ids, field_list)
 
 
 def _has_attachment(item_id):
@@ -1733,7 +1782,7 @@ def list_defects_by_environment(
     env: str, days: int = 30, state: str = "", top: int = 200, with_validation: bool = False,
     full: bool = False,
 ) -> list:
-    """List defects found in 'prod' / 'preprod' / 'dr'. Looks at the Found in Environment field
+    """List defects found in 'prod' / 'preprod' / 'stg' / 'dr'. Looks at the Found in Environment field
     ('PREPROD, PROD' counts in both); if it is empty, the [PROD]/[PREPROD] tag in the title is used.
     days = changed in the last N days (0 = no date limit).
     DEFAULT format: ID, Summary, Severity, Assignee, Created Date (Baku time).
@@ -1752,7 +1801,7 @@ def list_defects_by_environment(
     if days:
         q += f"AND [System.ChangedDate] >= @Today - {int(days)} "
     if state:
-        q += f"AND [System.State] = '{state}' "
+        q += f"AND [System.State] = '{_wq(state)}' "
     q += f"AND ({' OR '.join(conds)}) ORDER BY [System.ChangedDate] DESC"
     ids = [w["id"] for w in _call("POST", "wit/wiql", json_body={"query": q}).get("workItems", [])]
     out = []
@@ -2169,7 +2218,7 @@ def _dm_select(ids="", env="", only_open=True, wiql="", top=60):
         if only_open:
             q += "AND [System.State] NOT IN ('Closed', 'Done', 'Removed') "
         if env:
-            q += f"AND [Microsoft.VSTS.CMMI.FoundInEnvironment] CONTAINS '{env.replace(chr(39), '')}' "
+            q += f"AND [Microsoft.VSTS.CMMI.FoundInEnvironment] CONTAINS '{_wq(env)}' "
         q += "ORDER BY [System.CreatedDate] ASC"
         res = _call("POST", "wit/wiql", json_body={"query": q})
         id_list = [w["id"] for w in res.get("workItems", [])]
@@ -2189,11 +2238,11 @@ def _dm_scope_text(only_open, env, total, shown):
             f"{shown} of {total} shown")
 
 
-def _dm_analyse(meta, det, plan=None, overrides=None, now=None):
+def _dm_analyse(meta, det, overrides=None, now=None):
     changes = _dm.state_changes(det.get("updates", []))
     comments = det.get("comments", [])
     deliveries = _dm.deliveries_of(changes) or [_dm.parse_utc(meta.get("resolved_date"))]
-    due = _dm.due_info(meta["id"], comments, meta["state"], deliveries, plan, now)
+    due = _dm.due_info(meta["id"], comments, meta["state"], deliveries, now)
     ov = (overrides or {}).get(str(meta["id"]))
     rca = _dm.rca_info(comments, meta.get("root_cause"), ov, meta.get("changed", ""))
     return changes, comments, due, rca
@@ -2208,27 +2257,55 @@ def severity_rules() -> dict:
     return {k: v for k, v in cfg.items() if k != "heuristics"}
 
 
+DUE_PREFILTER = os.environ.get("TFS_DUE_PREFILTER", "true").lower() != "false"
+
+
+def _due_prefilter(ids):
+    """Ids whose History (discussion) contains the words 'due date' - one WIQL instead of fetching the
+    comments of every defect. None = not available (or disabled) -> caller checks every defect.
+    Verified 29.10.2026 on the 61 open PROD defects: same 22 ids as reading all comments."""
+    if not DUE_PREFILTER or not ids:
+        return None
+    found = set()
+    try:
+        for i in range(0, len(ids), 200):
+            chunk = ",".join(str(int(x)) for x in ids[i : i + 200])
+            q = (f"SELECT [System.Id] FROM WorkItems WHERE [System.Id] IN ({chunk}) "
+                 "AND [System.History] CONTAINS WORDS 'due date'")
+            found |= {w["id"] for w in _call("POST", "wit/wiql", json_body={"query": q}).get("workItems", [])}
+    except RuntimeError:
+        return None
+    return found
+
+
 @mcp.tool()
 def due_dates(ids: str = "", env: str = "", only_open: bool = True, wiql: str = "", top: int = 60,
               only_overdue: bool = False) -> dict:
     """Due Date report (read-only). DEFAULT columns (always use this format for due-date questions):
     ID, Summary, Severity, Assignee, Created Date, Due Date, Due Date Changed (times), Overdue.
-    There is NO due-date field in TFS: the date comes from config/vendor_plan.tsv if present, otherwise from
-    vendor comments (a future date in a sentence with ETA / will be / deliver / deploy / by / until ...).
-    'Due Date Changed' = how many times the vendor gave a different date. Overdue: 'Yes (N d)' when the date
-    has passed and the ball is still on the vendor; 'No (delivered)' / 'No (delivered late, N d)' once the vendor
-    moved it to Resolved / Ready for Testing. 'none given' = no date found (never guessed).
+    There is NO due-date field in TFS: the date comes from comments of ANY author that contain 'due date'
+    (case-insensitive) - the FIRST date written after the phrase (dd.mm.yyyy / dd.mm.yy / dd.mm = comment year);
+    several such comments -> the most recent comment wins. 'Due Date Changed' = how many times a different
+    date was given. Overdue: 'Yes (N d)' when the date is before today and the defect is still open on the
+    vendor side; 'No (delivered)' / 'No (delivered late, N d)' once moved to Resolved / Ready for Testing.
+    'none given' = no 'due date' comment with a date (never guessed). details[] has the author + comment date.
     ids: '329996, 326839' (optional); env: 'prod' / 'preprod' / 'dr' (Environment field); wiql: own query.
     Default = open Bug + Aztelekom Bug defects. Comments are cached per revision, so a second run is fast;
     items not finished within ~40 s are listed in not_processed - just call again."""
     metas, total = _dm_select(ids, env, only_open, wiql, top)
-    got, skipped = _dm_load_many(metas)
-    plan, plan_time = _dm.load_vendor_plan()
+    hits = _due_prefilter([m["id"] for m in metas])
+    need = metas if hits is None else [m for m in metas if m["id"] in hits]
+    got, skipped = _dm_load_many(need)
+    empty = {"comments": [], "updates": []}
     rows, details = [], []
     for m in metas:
-        if m["id"] not in got:
+        if hits is not None and m["id"] not in hits:
+            det = empty                 # no comment with 'due date' -> nothing to fetch
+        elif m["id"] in got:
+            det = got[m["id"]]
+        else:
             continue
-        _ch, _co, due, _rca = _dm_analyse(m, got[m["id"]], plan)
+        _ch, _co, due, _rca = _dm_analyse(m, det)
         if only_overdue and not str(due["overdue"]).startswith("Yes"):
             continue
         rows.append(_dm.due_row(m, due))
@@ -2240,10 +2317,9 @@ def due_dates(ids: str = "", env: str = "", only_open: bool = True, wiql: str = 
     none = sum(1 for r in rows if r["Due Date"] == "none given")
     return {"fetched_at_baku": _dm.baku(datetime.utcnow()),
             "counted": _dm_scope_text(only_open, env, total, len(metas)),
-            "vendor_plan": f"config/vendor_plan.tsv ({_dm.baku(plan_time)})" if plan_time else "not present (comments only)",
             "summary": {"rows": len(rows), "overdue": over, "no_due_date": none},
             "rows": rows, "details": details, "not_processed": skipped,
-            "note": "Due dates from comments are heuristic; check 'details' (quote) when it matters."}
+            "note": "Due date = first date after 'due date' in the latest such comment; see details (quote)."}
 
 
 @mcp.tool()
@@ -2265,7 +2341,7 @@ def rca_status(ids: str = "", env: str = "", wiql: str = "", top: int = 60, buck
     for m in metas:
         if m["id"] not in got:
             continue
-        _ch, _co, _due, rca = _dm_analyse(m, got[m["id"]], None, overrides)
+        _ch, _co, _due, rca = _dm_analyse(m, got[m["id"]], overrides)
         if bucket and rca["bucket"] != int(bucket):
             continue
         r = _dm.compact_row(m)
@@ -2325,8 +2401,7 @@ def defect_summary(item_id: int, max_thread: int = 30) -> dict:
         raise RuntimeError(f"Work item {item_id} not found")
     det = _dm_details(item_id, meta["rev"])
     _dm_cache_save()
-    plan, _pt = _dm.load_vendor_plan()
-    changes, comments, due, rca = _dm_analyse(meta, det, plan, _dm.load_rca_overrides())
+    changes, comments, due, rca = _dm_analyse(meta, det, _dm.load_rca_overrides())
     reopen = _dm.reopen_info(changes)
 
     thread = []

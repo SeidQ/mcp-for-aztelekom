@@ -17,7 +17,7 @@
     {
       "key": "preconditions",
       "title": "Preconditions",
-      "required": true,
+      "required": false,
       "aliases": [
         "Preconditions",
         "Precondition"
@@ -111,7 +111,7 @@
       {
         "status": "field_invalid",
         "level": "error",
-        "message": "Found in Environment dəyəri icazəli siyahıda deyil (PROD / PREPROD)"
+        "message": "Found in Environment dəyəri icazəli siyahıda deyil (PROD / PREPROD / STG / DR)"
       },
       {
         "status": "mismatch",
@@ -126,7 +126,7 @@
       {
         "status": "title_tag_missing",
         "level": "warning",
-        "message": "Title-da [PROD]/[PREPROD] teqi yoxdur"
+        "message": "Title-da [PROD]/[PREPROD]/[STG] teqi yoxdur"
       }
     ]
   },

@@ -265,6 +265,8 @@ def norm_env_token(tok):
         return "PREPROD"
     if t in ("PROD", "PRODUCTION"):
         return "PROD"
+    if t in ("STG", "STAGE", "STAGING"):
+        return "STG"
     return t
 
 

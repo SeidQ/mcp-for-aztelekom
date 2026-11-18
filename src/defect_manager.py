@@ -5,12 +5,11 @@ tfs_mcp_server.py fetches comments / history and passes them in.
 Rules come from the "defect-manager" spec (Azercell / AZTelekom):
   * our side = comments / changes made through the shared account AZTelekom (real author is the
     [Name] prefix in the text); every other author is the vendor (Suntech).
-  * Due date: there is no TFS field -> derived from vendor comments (date + who + when) or
-    config/vendor_plan.tsv (ID <tab> assignee <tab> state <tab> note <tab> due date) if it exists.
+  * Due date: there is no TFS field -> taken from comments of ANY author that contain "due date":
+    first date after the phrase, the most recent such comment wins; before today = overdue.
   * RCA field Microsoft.VSTS.CMMI.RootCause = "Unknown" means NOT provided; real RCA is in comments.
   * Uncertain results are flagged ("unclear", confidence "low"), never guessed.
 """
-import csv
 import html
 import json
 import os
@@ -20,21 +19,25 @@ from datetime import datetime, timedelta, date
 CONFIG_DIR = os.environ.get(
     "TFS_CONFIG_DIR", os.path.join(os.path.dirname(os.path.abspath(__file__)), "config")
 )
-# per-user data (rca_overrides.json, vendor_plan.tsv): TFS_DATA_DIR, otherwise the config folder
+# per-user data (rca_overrides.json): TFS_DATA_DIR, otherwise the config folder
 DATA_DIR = os.environ.get("TFS_DATA_DIR") or CONFIG_DIR
 BAKU = timedelta(hours=4)          # Asia/Baku, no DST
 OUR_ACCOUNTS = {a.strip().lower() for a in os.environ.get("TFS_OUR_ACCOUNTS", "AZTelekom").split(",") if a.strip()}
 
 # ---------------------------------------------------------------- states (2 workflows)
 # Bug:           Proposed -> Active -> Resolved -> Closed
-# Aztelekom Bug: Proposed -> Active -> In Progress -> Ready for Testing -> Done / Closed
+# Aztelekom Bug: Proposed -> Active -> In Progress -> Ready for Testing -> In testing -> Done
+#                (+ Answered, Blocked, Deferred – Next Phase). All 'Bug' items were migrated to
+#                'Aztelekom Bug' on 04.11.2026 (Resolved -> Ready for Testing).
 VENDOR_STATES = {"proposed", "new", "active", "in progress", "committed", "approved"}
-OUR_STATES = {"resolved", "ready for testing"}
+OUR_STATES = {"resolved", "ready for testing", "in testing", "answered"}   # ball on AZTelekom
+PARKED_STATES = {"blocked", "deferred – next phase", "deferred - next phase"}
 CLOSED_STATES = {"closed", "done", "removed"}
 STATE_GROUP = {   # normalised view used in reports
     "proposed": "Proposed", "new": "Proposed",
     "active": "Active", "in progress": "Active", "committed": "Active", "approved": "Active",
-    "resolved": "Resolved", "ready for testing": "Resolved",
+    "resolved": "Resolved", "ready for testing": "Resolved", "in testing": "Resolved", "answered": "Resolved",
+    "blocked": "Blocked", "deferred – next phase": "Deferred", "deferred - next phase": "Deferred",
     "closed": "Closed", "done": "Closed", "removed": "Closed",
 }
 RETEST_DONE_REASONS = {"verified", "validation test passed", "resolution verified and accepted"}
@@ -49,6 +52,8 @@ def side_of(state):
         return "us"
     if s in CLOSED_STATES:
         return "none"
+    if s in PARKED_STATES:
+        return "parked"
     return "unclear"
 
 
@@ -148,17 +153,17 @@ def short(text, n=220):
 _MONTHS = {m: i for i, m in enumerate(
     ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"], 1)}
 _MON = r"(jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|june?|july?|aug(?:ust)?|sep(?:t(?:ember)?)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)"
+# Rule (.kiro/steering/tfs-due-dates.md): only comments that contain "due date" count (any author);
+# the FIRST date written after the phrase is the due date; the most recent such comment wins.
 _DATE_PATTERNS = [
-    ("dmy", re.compile(r"(?<!\d)(?<!\d\.)(\d{1,2})[./](\d{1,2})[./](\d{4}|\d{2})(?!\d)(?!\.\d)")),
+    ("dmy", re.compile(r"(?<![\d.])(\d{1,2})[./](\d{1,2})[./](\d{4}|\d{2})(?![\d])(?!\.\d)")),
     ("ymd", re.compile(r"(?<!\d)(\d{4})-(\d{2})-(\d{2})(?!\d)")),
-    ("d_mon_y", re.compile(r"(?<!\d)(\d{1,2})(?:st|nd|rd|th)?\s*(?:of\s+)?" + _MON + r"\.?,?\s*(\d{4})?", re.I)),
-    ("mon_d_y", re.compile(_MON + r"\.?\s+(\d{1,2})(?:st|nd|rd|th)?(?!\d)(?:,?\s*(\d{4}))?", re.I)),
-    ("dm_kw", re.compile(r"\b(?:on|by|until|till|before|to)\s+(\d{1,2})[./](\d{1,2})(?!\d)(?![./]\d)", re.I)),
+    ("d_mon_y", re.compile(r"(?<!\d)(\d{1,2})(?:st|nd|rd|th)?\s*(?:of\s+)?" + _MON + r"\b\.?,?\s*(\d{4})?", re.I)),
+    ("mon_d_y", re.compile(r"\b" + _MON + r"\.?\s+(\d{1,2})(?:st|nd|rd|th)?(?!\d)(?:,?\s*(\d{4}))?", re.I)),
+    ("dm", re.compile(r"(?<![\d.:])(\d{1,2})[./](\d{1,2})(?![\d:])(?![./]\d)")),   # '13.10' (no year)
 ]
-DUE_KEYWORDS = re.compile(
-    r"\b(eta|due|deadline|deliver\w*|deploy\w*|install\w*|releas\w*|planned|plan|scheduled|"
-    r"expected|target\w*|until|till|by|will be|will\b|shall|going to|fix\w* (?:on|by)|"
-    r"provide\w*|ready|available)\b", re.I)
+DUE_PHRASE = re.compile(r"\bdue[\s\-]*date\b", re.I)
+_SENT_SPLIT = re.compile(r"\n+|(?<=[.!?])\s+(?=[A-Z\[(])")   # used by rca_info
 
 
 def _mk(y, m, d):
@@ -168,12 +173,12 @@ def _mk(y, m, d):
         return None
 
 
-def find_dates(sentence, ref_date):
-    """All calendar dates written in a sentence. Year missing -> year of ref_date (next year if
-    that would be > 60 days in the past)."""
+def find_dates(text, ref_year):
+    """[(position, date)] of every calendar date in the text, ordered by position.
+    Year missing -> ref_year (the year the comment was written)."""
     out = []
     for kind, rx in _DATE_PATTERNS:
-        for m in rx.finditer(sentence):
+        for m in rx.finditer(text):
             g = m.groups()
             if kind == "dmy":
                 y = int(g[2]) + 2000 if len(g[2]) == 2 else g[2]   # '22.10.26' -> 2026
@@ -181,87 +186,49 @@ def find_dates(sentence, ref_date):
             elif kind == "ymd":
                 d = _mk(g[0], g[1], g[2])
             elif kind == "d_mon_y":
-                d = _mk(g[2] or ref_date.year, _MONTHS[g[1][:3].lower()], g[0])
-                if d and not g[2] and d < ref_date - timedelta(days=60):
-                    d = _mk(ref_date.year + 1, d.month, d.day)
+                d = _mk(g[2] or ref_year, _MONTHS[g[1][:3].lower()], g[0])
             elif kind == "mon_d_y":
-                d = _mk(g[2] or ref_date.year, _MONTHS[g[0][:3].lower()], g[1])
-                if d and not g[2] and d < ref_date - timedelta(days=60):
-                    d = _mk(ref_date.year + 1, d.month, d.day)
-            else:  # dm_kw
-                d = _mk(ref_date.year, g[1], g[0])
-                if d and d < ref_date - timedelta(days=60):
-                    d = _mk(ref_date.year + 1, d.month, d.day)
-            if d and d not in out:
-                out.append(d)
-    return out
-
-
-_SENT_SPLIT = re.compile(r"\n+|(?<=[.!?])\s+(?=[A-Z\[(])")
+                d = _mk(g[2] or ref_year, _MONTHS[g[0][:3].lower()], g[1])
+            else:  # dm
+                d = _mk(ref_year, g[1], g[0])
+            if d:
+                out.append((m.start(), -(m.end() - m.start()), d))
+    out.sort()   # earliest position first; at the same position the longest match wins
+    return [(p, d) for p, _neg_len, d in out]
 
 
 def due_from_comment(text_plain, comment_dt_utc):
-    """-> (due_date or None, sentence, confidence). Only future dates (>= comment day) written in a
-    sentence with a commitment keyword count. Several different dates -> the latest, confidence low."""
-    ref = (comment_dt_utc + BAKU).date()
-    hits = []
-    for sent in _SENT_SPLIT.split(text_plain or ""):
-        if "?" in sent:
-            continue                        # questions are not commitments
-        if not DUE_KEYWORDS.search(sent):
-            continue
-        for d in find_dates(sent, ref):
-            if ref <= d <= ref + timedelta(days=400):
-                hits.append((d, sent.strip()))
+    """-> (due_date or None, quote, confidence). The comment must contain 'due date'; the first date
+    written after the first 'due date' is taken ('Due date: 31.10.2026 ... previously given due date
+    13.10.2026' -> 31.10.2026). Past dates count too (they make the defect overdue)."""
+    txt = text_plain or ""
+    m = DUE_PHRASE.search(txt)
+    if not m:
+        return None, "", ""
+    ref_year = (comment_dt_utc + BAKU).year
+    tail = txt[m.start():]
+    hits = find_dates(tail, ref_year)
     if not hits:
         return None, "", ""
-    dates = sorted({d for d, _ in hits})
-    d = dates[-1]
-    sent = next(s for x, s in hits if x == d)
-    return d, sent, ("high" if len(dates) == 1 else "low")
+    pos, d = hits[0]
+    return d, tail[: pos + 12], "high"
 
 
-def load_vendor_plan():
-    """config/vendor_plan.tsv: ID, assignee, state, vendor note, due date (header optional)."""
-    path = os.path.join(DATA_DIR, "vendor_plan.tsv")
-    plan = {}
-    if not os.path.exists(path):
-        return plan, None
-    with open(path, encoding="utf-8-sig") as fh:
-        for row in csv.reader(fh, delimiter="\t"):
-            if not row or not row[0].strip().lstrip("#").isdigit():
-                continue
-            due = None
-            raw = (row[4] if len(row) > 4 else "").strip()
-            for fmt in ("%Y-%m-%d", "%d.%m.%Y", "%d/%m/%Y"):
-                try:
-                    due = datetime.strptime(raw, fmt).date()
-                    break
-                except ValueError:
-                    continue
-            plan[int(row[0].strip().lstrip("#"))] = {
-                "assignee": row[1].strip() if len(row) > 1 else "",
-                "note": row[3].strip() if len(row) > 3 else "", "due": due, "raw": raw}
-    mtime = datetime.utcfromtimestamp(os.path.getmtime(path))
-    return plan, mtime
-
-
-def due_info(item_id, comments, state, deliveries=None, plan=None, now_utc=None):
+def due_info(item_id, comments, state, deliveries=None, now_utc=None):
     """comments: [{author, created (UTC str), text (html)}] oldest or newest first.
-    -> {due, given_by, given_on, source, changes, history, overdue, confidence, quote}"""
+    -> {due, given_by, given_on, source, changes, history, overdue, confidence, quote}
+    Due date = the most recent comment that contains 'due date' with a date (any author)."""
     now_utc = now_utc or datetime.utcnow()
     seq = []
     for c in sorted(comments, key=lambda c: c.get("created") or ""):
         txt = plain(c.get("text", ""))
-        side, name = who(c.get("author"), txt)
-        if side != "vendor":
-            continue
+        _side, name = who(c.get("author"), txt)
         cdt = parse_utc(c.get("created"))
         if not cdt:
             continue
-        d, sent, conf = due_from_comment(txt, cdt)
+        d, quote, conf = due_from_comment(txt, cdt)
         if d:
-            seq.append({"due": d, "by": name, "on": cdt, "quote": short(sent, 160), "confidence": conf})
+            seq.append({"due": d, "by": name, "on": cdt, "quote": short(quote, 160), "confidence": conf})
     changes = 0
     for a, b in zip(seq, seq[1:]):
         if a["due"] != b["due"]:
@@ -269,18 +236,10 @@ def due_info(item_id, comments, state, deliveries=None, plan=None, now_utc=None)
     out = {"due": None, "given_by": "", "given_on": "", "source": "none given", "changes": changes,
            "history": [{"due": s["due"].isoformat(), "by": s["by"], "on": baku(s["on"])} for s in seq],
            "confidence": "", "quote": ""}
-    p = (plan or {}).get(int(item_id))
-    if p and p.get("due"):
-        out.update(due=p["due"], given_by=p.get("assignee") or "vendor plan", given_on="",
-                   source="vendor_plan.tsv", confidence="high", quote=short(p.get("note", ""), 160))
-        if seq and seq[-1]["due"] != p["due"]:
-            out["changes"] += 1
-    elif p and p.get("raw"):
-        out.update(source="vendor_plan.tsv", confidence="low", quote=f"unclear date: {p['raw']}")
-    elif seq:
+    if seq:
         last = seq[-1]
         out.update(due=last["due"], given_by=last["by"], given_on=baku(last["on"]),
-                   source="vendor comment", confidence=last["confidence"], quote=last["quote"])
+                   source="comment", confidence=last["confidence"], quote=last["quote"])
     given = parse_utc(out["given_on"].replace(" ", "T")) - BAKU if out["given_on"] else None
     out["overdue"] = overdue_text(out["due"], state, deliveries, now_utc, given)
     if out["due"]:
@@ -299,13 +258,16 @@ def overdue_text(due, state, deliveries, now_utc, given_utc=None):
     deliveries = sorted(d for d in (deliveries or []) if d)
     side = side_of(state)
     today = baku_today(now_utc)
+    if side == "parked":
+        return f"– ({state})"
     after = [d for d in deliveries if not given_utc or d >= given_utc]
+    if after and side == "vendor":
+        # delivered once, reopened since and no new date: still open, so the date decides
+        note = " – reopened after delivery, no new date"
+        return (f"Yes ({(today - due).days} d)" if due < today else "No") + note
     if after:
         rd = (after[0] + BAKU).date()
-        txt = "No (delivered)" if rd <= due else f"No (delivered late, {(rd - due).days} d)"
-        if side == "vendor":
-            txt += " – reopened since, no new date"
-        return txt
+        return "No (delivered)" if rd <= due else f"No (delivered late, {(rd - due).days} d)"
     if side == "vendor":
         return f"Yes ({(today - due).days} d)" if due < today else "No"
     return "No (delivered)"
@@ -505,6 +467,8 @@ def next_move(state, blocked="", rca=None, due=None, reason=""):
     st = (state or "").strip()
     if side == "none":
         return {"owner": "nobody", "action": f"{st} ({closed_kind(st, reason) or 'closed'}) – nothing to do"}
+    if side == "parked":
+        return {"owner": "both", "action": f"{st} – agree the unblock condition / next phase date"}
     if side == "us":
         if str(blocked).lower() in ("yes", "true", "1"):
             return {"owner": "us (blocked)", "action": "retest blocked – see the Blocked reason / predecessor link; unblock, then retest"}

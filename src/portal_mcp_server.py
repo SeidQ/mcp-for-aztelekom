@@ -42,6 +42,13 @@ YENİ (27.10.2026, daha etibarlı kliklər + recipe):
   - recipe_start / recipe_save / recipe_list / recipe_show / recipe_run: test case addımlarını
     saxlayıb gələn dəfə göstərmək və ya təkrar işlətmək (confirm=True addımları default atlanır).
 
+YENİ (29.10.2026, öyrənən element yaddaşı, LLM token-i sərf etmir):
+  - Element alətlərinin vaxtı, xətaları, işləyən klik üsulu və frame-i src/state/element_memory.json-a yazılır.
+  - click/click_text/fill/fill_by_row/type_text/select_option: element verilən frame-də yoxdursa öyrənilmiş
+    frame, sonra digər frame-lər yoxlanır; recipe-yə işləyən frame yazılır.
+  - _smart_click keçən dəfə işləyən üsulu (force / əsl idarə elementi) birbaşa sınayır.
+  - learn_report: yavaş / alınmayan / fallback-ə düşən elementlər (forget=True ilə səhv qeydi silmək).
+
 DƏYİŞİKLİKLƏR:
   - PORTAL_USER/PORTAL_PASS artıq koda yazılmayıb, yalnız mühit dəyişəni ilə verilir.
   - Brauzer dialoqları (alert/confirm) indi qeydə alınır və PORTAL_DIALOG mühit
@@ -100,15 +107,22 @@ ENVS = {
              "sv": os.getenv("PROD_SUNVIZION_URL", "https://azt-bss.aztelekom.az/20_0/Portal")},
 }
 PROD_HOST = "azt-bss.aztelekom.az"
-_env = {"name": "PREPROD"}
+# prod_mode: "readonly" (yalnız baxış/naviqasiya), "verify" (baxış + Accept + forma oxuma,
+# amma data dəyişən düymələr bloklu). set_prod_mode ilə dəyişilir.
+_env = {"name": "PREPROD", "prod_mode": "full"}
 
 # PROD-da YALNIZ OXUMA: bu adlara klik etmək olar (sorğu/proses nömrəsi, menyu, axtarış, baxış düymələri).
 PROD_CLICK_OK = re.compile(
     r"^\s*(TR\d{5,}|\d{4,}|\d+_\d+|Find Customer|Find Subscriber|Customers|Subscribers|Customer home page|"
     r"Subscriber starting page|Customer data|Customer list|Active processes|Processes finished/ ?cancelled|"
-    r"Customer support processes|Search|Show process details|Show [Tt]asks|Show [Aa]ll [Tt]asks|Close|"
+    r"Customer support processes|Search|Show.*|show|Close|Accept|Edit|"
     r"Customer service accounts|Show accounts|Customer contracts|Show contracts|My Tasks|Tasks|Processes|"
-    r"Go to the (next|previous|first|last) page)\s*$")
+    r"Refresh|Filter Row|Load All|Expand All|Details|Additional Info|General|Technical Issue|"
+    r"Go to the (next|previous|first|last) page|previous page|next page|first page|last page)\s*$")
+# PROD-da verify rejimində belə BLOKLANAN (data dəyişən) düymə/əməliyyat adları.
+PROD_WRITE_WORDS = re.compile(
+    r"(Finalize|Finish|Save|Create|Cancel|Delete|Remove|Submit|Activate|Reject|Approve|Start Process|"
+    r"Accept and Finalize|Change Status)", re.IGNORECASE)
 # PROD-da yalnız AXTARIŞ sahələrinə yazmaq olar (məlumatı dəyişmir): SunVizion proses/task axtarışı, CRM 'Enter identifier'.
 PROD_SEARCH_LABELS = {"Name", "Process ID", "Starting Context", "Matching Context", "Collaboration ID",
                       "Reference Process", "Enter identifier:", "Enter identifier"}
@@ -148,18 +162,27 @@ def prod_readonly(kind: str):
                 b = sig.bind(*args, **kwargs)
                 b.apply_defaults()
                 a = b.arguments
-                if kind == "search":   # fill: yalnız axtarış sahələri
-                    if not _prod_search_ok(a.get("label") or ""):
+                mode = _env.get("prod_mode", "verify")
+                if mode == "full":
+                    return fn(*args, **kwargs)   # PROD tam icazə (orkestrator təsdiqi ilə)
+                verify = mode == "verify"
+                if kind == "search":   # fill: axtarış sahələri (verify rejimində hər fill icazəli)
+                    if not (verify or _prod_search_ok(a.get("label") or "")):
                         _prod_refuse(f"{fn.__name__}('{a.get('label')}')")
                 if kind == "write":
-                    _prod_refuse(fn.__name__)
+                    # verify rejimi: yalnız data dəyişən adlar bloklanır; baxış/forma əməliyyatları keçir.
+                    name = str(a.get("name") or a.get("text") or a.get("button") or a.get("value") or "")
+                    if not verify or PROD_WRITE_WORDS.search(name):
+                        _prod_refuse(f"{fn.__name__}('{name}')" if name else fn.__name__)
                 if kind == "click":
                     name = a.get("name") or a.get("text") or ""
-                    if not PROD_CLICK_OK.match(name):
+                    if PROD_WRITE_WORDS.search(name):
+                        _prod_refuse(f"{fn.__name__}('{name}') [data dəyişən əməliyyat]")
+                    if not (verify or PROD_CLICK_OK.match(name)):
                         _prod_refuse(f"{fn.__name__}('{name}')")
                 if kind == "key" and a.get("key") not in PROD_KEYS_OK:
                     url = (_s["page"].url if _s["page"] else "") or ""
-                    if not (a.get("key") == "Enter" and "/Portal/app/wfl/" in url):
+                    if not (verify or (a.get("key") == "Enter" and "/Portal/app/wfl/" in url)):
                         _prod_refuse(f"press_key('{a.get('key')}')")
             return fn(*args, **kwargs)
         return wrapper
@@ -241,8 +264,15 @@ def _rec_step(name, sig, args, kwargs, ok, result, t0):
             isinstance(v, (int, float)) and not isinstance(v, bool) and v == 0)}
     except Exception:  # noqa: BLE001
         params = dict(kwargs)
+    fu = _s.pop("frame_used", None)
+    if fu is not None and "frame" in sig.parameters:
+        params["frame"] = fu          # recipe gələn dəfə birbaşa işləyən frame-dən başlasın
+        if fu == 0:
+            params.pop("frame", None)
+    ms = int((time.time() - t0) * 1000)
+    _mem_record(name, params, ok, ms, result)
     _steps.append({"tool": name, "args": params, "ok": ok, "used": _s.get("used", ""),
-                   "result": (result or "")[:200], "ms": int((time.time() - t0) * 1000),
+                   "result": (result or "")[:200], "ms": ms,
                    "time": time.strftime("%Y-%m-%d %H:%M:%S")})
     del _steps[:-300]
     try:
@@ -252,6 +282,149 @@ def _rec_step(name, sig, args, kwargs, ok, result, t0):
             _j.dump(_steps, fh, ensure_ascii=False, indent=1)
     except Exception:  # noqa: BLE001
         pass
+
+
+# ---------- öyrənən element yaddaşı (29.10.2026) ----------
+# Hər element alətinin (click, fill, sv_choose ...) nəticəsi src/state/element_memory.json-a yazılır:
+# neçə dəfə çağırılıb, neçə dəfə alınmayıb, orta/maks ms, hansı klik üsulu işləyib, hansı frame-də tapılıb.
+# Gələn dəfə: (1) element verilən frame-də yoxdursa əvvəl öyrənilmiş frame, sonra qalan frame-lər yoxlanır;
+# (2) _smart_click keçən dəfə işləyən üsulu (force / əsl idarə elementi) BİRBAŞA sınayır, 3 s-lik
+# uğursuz cəhdləri gözləmir. LLM token-i sərf olunmur. Hesabat: learn_report.
+MEM_PATH = os.getenv("PORTAL_MEMORY_FILE") or os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), "state", "element_memory.json")
+SLOW_MS = int(os.getenv("PORTAL_SLOW_MS", "3000"))
+_LEARN_TOOLS = {"click", "click_text", "fill", "fill_by_row", "type_text", "select_option", "sv_choose",
+                "sv_toolbar", "sv_open_row", "sv_select_row", "click_search", "search_customer", "upload_file"}
+_mem = {"data": None}
+
+
+def _mem_data() -> dict:
+    if _mem["data"] is None:
+        try:
+            import json as _j
+            with open(MEM_PATH, encoding="utf-8") as fh:
+                _mem["data"] = _j.load(fh)
+        except Exception:  # noqa: BLE001
+            _mem["data"] = {}
+    return _mem["data"]
+
+
+def _mem_save():
+    try:
+        import json as _j
+        d = _mem_data()
+        if len(d) > 600:   # ən köhnələri at
+            for k in sorted(d, key=lambda k: d[k].get("last", ""))[:len(d) - 600]:
+                d.pop(k, None)
+        os.makedirs(os.path.dirname(MEM_PATH), exist_ok=True)
+        tmp = MEM_PATH + ".tmp"
+        with open(tmp, "w", encoding="utf-8") as fh:
+            _j.dump(d, fh, ensure_ascii=False, indent=1)
+        os.replace(tmp, MEM_PATH)
+    except Exception:  # noqa: BLE001
+        pass
+
+
+def _mem_key(tool: str, a: dict) -> str:
+    target = next((str(a[k]) for k in ("name", "text", "label", "row_text", "button") if a.get(k)), "")
+    role = a.get("role") or ("button" if tool == "click" else "")
+    nth = a.get("nth") or a.get("index") or 0
+    return f"{tool}|{target}|{role}|{nth}"
+
+
+def _url_key() -> str:
+    try:
+        from urllib.parse import urlparse as _up
+        u = _up(_s["page"].url if _s["page"] else "")
+        return re.sub(r"\d{3,}", "#", (u.path or "") + (("#" + u.fragment.split("?")[0]) if u.fragment else ""))
+    except Exception:  # noqa: BLE001
+        return ""
+
+
+def _mem_get(key: str) -> dict:
+    return _mem_data().get(key or "", {}) if key else {}
+
+
+def _mem_record(tool, params, ok, ms, result):
+    if tool not in _LEARN_TOOLS:
+        return
+    try:
+        d = _mem_data()
+        key = _mem_key(tool, params)
+        e = d.setdefault(key, {"n": 0, "fail": 0, "avg_ms": 0, "max_ms": 0})
+        e["n"] += 1
+        e["avg_ms"] = int((e["avg_ms"] * (e["n"] - 1) + ms) / e["n"])
+        e["max_ms"] = max(e["max_ms"], ms)
+        e["last_ms"] = ms
+        e["last"] = time.strftime("%Y-%m-%d %H:%M:%S")
+        if ok:
+            if _s.get("method"):
+                e["method"] = _s["method"]
+            if _s.get("used"):
+                e["used"] = _s["used"][:120]
+        else:
+            e["fail"] += 1
+            e["last_err"] = (str(result).splitlines() or [""])[0][:200]
+        _s["method"] = ""
+        _mem_save()
+    except Exception:  # noqa: BLE001
+        pass
+
+
+def _not_found(e: Exception) -> bool:
+    s = str(e)
+    return "tapılmadı" in s or "yoxdur (cəmi" in s
+
+
+def learned(fn):
+    """frame parametri olan alətlər üçün: element verilən frame-də TAPILMAYANDA öyrənilmiş frame, sonra
+    digər frame-lər yoxlanır. 'Tapılmadı' xətaları sürətlidir (count()==0), ona görə əvvəlcə verilən frame
+    sınanır (köhnə davranış dəyişmir). Timeout və digər xətalarda təkrar cəhd YOXDUR."""
+    sig = inspect.signature(fn)
+
+    @functools.wraps(fn)
+    def wrapper(*args, **kwargs):
+        b = sig.bind(*args, **kwargs)
+        b.apply_defaults()
+        a = dict(b.arguments)
+        key = _mem_key(fn.__name__, a)
+        url = _url_key()
+        given = a.get("frame", 0)
+        hint = (_mem_get(key).get("frames") or {}).get(url)
+        _s["learn_key"] = key
+        _s["frame_used"] = None
+        try:
+            try:
+                n = len(_page().frames)
+            except Exception:  # noqa: BLE001
+                n = 1
+            order = [given] + ([hint] if isinstance(hint, int) else []) + list(range(n))
+            tried, last = set(), None
+            for fr in order:
+                if fr in tried or fr < 0 or fr >= max(n, given + 1):
+                    continue
+                tried.add(fr)
+                a["frame"] = fr
+                if fr != given:
+                    _s["used"] = ""
+                try:
+                    res = fn(**a)
+                except Exception as e:  # noqa: BLE001
+                    if not _not_found(e):
+                        raise
+                    last = e
+                    continue
+                if fr != given:
+                    _s["frame_used"] = fr
+                    _s["used"] = ((_s["used"] + "; ") if _s.get("used") else "") + \
+                        f"frame {given}-də yox idi -> frame={fr}" + (" (öyrənilmiş)" if fr == hint else "")
+                    e = _mem_data().setdefault(key, {"n": 0, "fail": 0, "avg_ms": 0, "max_ms": 0})
+                    e.setdefault("frames", {})[url] = fr
+                return res
+            raise last if last else RuntimeError(f"{fn.__name__}: element tapılmadı")
+        finally:
+            _s["learn_key"] = ""
+    return wrapper
 
 # Hadisə jurnalı: (vaxt, növ, mətn)
 _events = deque(maxlen=300)
@@ -384,8 +557,27 @@ def _smart_click(loc, nth: int, what: str):
     if not vis:
         _s["used"] = "görünən element yox idi -> gizli elementlər yoxlandı"
     el = cands[nth] if nth < len(cands) else cands[-1]
+    # öyrənilmiş üsul: keçən dəfə adi klik alınmayıbsa (3 s itirilib), işləyən üsulu birbaşa sına
+    learned_m = _mem_get(_s.get("learn_key", "")).get("method", "")
+    if learned_m == "control":
+        ctl, how = _control_for(el)
+        if ctl is not None:
+            try:
+                ctl.click(timeout=QUICK)
+                _s["used"], _s["method"] = f"{how} (öyrənilmiş, birbaşa)", "control"
+                return len(cands)
+            except Exception:  # noqa: BLE001
+                pass
+    elif learned_m == "force":
+        try:
+            el.click(timeout=QUICK, force=True)
+            _s["used"], _s["method"] = "force click (öyrənilmiş, birbaşa)", "force"
+            return len(cands)
+        except Exception:  # noqa: BLE001
+            pass
     try:
         el.click(timeout=QUICK)
+        _s["method"] = "normal"
         if vis and len(vis) != total:
             _s["used"] = f"yalnız görünən elementlər ({len(vis)}/{total})"
         return len(cands)
@@ -395,13 +587,13 @@ def _smart_click(loc, nth: int, what: str):
             if ctl is not None:
                 try:
                     ctl.click(timeout=QUICK)
-                    _s["used"] = how
+                    _s["used"], _s["method"] = how, ("control" if c is el else "")
                     return len(cands)
                 except Exception:  # noqa: BLE001
                     continue
         try:
             el.click(timeout=QUICK, force=True)
-            _s["used"] = "force click"
+            _s["used"], _s["method"] = "force click", "force"
             return len(cands)
         except Exception:  # noqa: BLE001
             raise RuntimeError(f"{what}: klik alınmadı ({str(e1).splitlines()[0]})") from e1
@@ -623,6 +815,7 @@ def inspect_page(frame: int = -1) -> str:
 @mcp.tool()
 @pw
 @prod_readonly("click")
+@learned
 def click(name: str, exact: bool = False, frame: int = 0, role: str = "button", nth: int = 0) -> str:
     """Rol və görünən ada görə klik: role=button|link|menuitem|tab|checkbox|radio|combobox.
     nth yalnız GÖRÜNƏN elementlər arasında sayılır. Tapılmasa/basılmasa avtomatik fallback:
@@ -640,6 +833,7 @@ def click(name: str, exact: bool = False, frame: int = 0, role: str = "button", 
 @mcp.tool()
 @pw
 @prod_readonly("click")
+@learned
 def click_text(text: str, exact: bool = False, frame: int = 0, nth: int = 0) -> str:
     """Görünən mətnə görə klik. Eyni mətn bir neçə yerdədirsə nth ilə seçin (0-dan, yalnız GÖRÜNƏN-lər).
     Mətn label-dirsə və basılmırsa (Kendo floating label) avtomatik əsl sahəni (combobox/input) basır."""
@@ -655,7 +849,29 @@ def click_text(text: str, exact: bool = False, frame: int = 0, nth: int = 0) -> 
 
 @mcp.tool()
 @pw
+@prod_readonly("click")
+def right_click(text: str, exact: bool = False, frame: int = 0, nth: int = 0) -> str:
+    """Görünən mətnə SAĞ klik (kontekst menyu açır, məs. OSS Events sətri -> Processes -> New).
+    nth yalnız GÖRÜNƏN elementlər arasında. Sonra menyu bəndini click_text ilə seçin."""
+    f = _frame(frame)
+    vis = _visible(f.get_by_text(text, exact=exact))
+    if not vis:
+        raise RuntimeError(f"'{text}' tapılmadı (görünən).")
+    if nth >= len(vis):
+        raise RuntimeError(f"'{text}': nth={nth}, görünən say {len(vis)}.")
+    vis[nth].click(button="right", timeout=QUICK)
+    time.sleep(0.6)
+    items = [t.strip() for t in f.locator(
+        "[role=menuitem]:visible, .k-menu-item:visible, .k-context-menu li:visible, .p-contextmenu li:visible"
+    ).all_inner_texts() if t.strip()][:30]
+    return (f"Sağ klik: '{text}' ({nth + 1}/{len(vis)}). Menyu: "
+            + (" | ".join(items) if items else "(menyu bəndi tapılmadı - screenshot ilə yoxlayın)"))
+
+
+@mcp.tool()
+@pw
 @prod_readonly("write")
+@learned
 def select_option(label: str, value: str, frame: int = 0) -> str:
     """Label-ə görə dropdown/select-dən seçim edir. Native <select> və Kendo/Angular dropdown
     (multiselect, combobox) ikisi də işləyir: native deyilsə avtomatik sahəni açıb variantı basır.
@@ -769,6 +985,7 @@ def search_customer(name: str = "", customer_id: str = "") -> str:
 @mcp.tool()
 @pw
 @prod_readonly("search")
+@learned
 def fill(label: str, value: str, frame: int = 0) -> str:
     """Label-ə görə input doldurur. Label tapılmasa avtomatik sətir mətninə görə axtarır."""
     f = _frame(frame)
@@ -787,6 +1004,7 @@ def fill(label: str, value: str, frame: int = 0) -> str:
 @mcp.tool()
 @pw
 @prod_readonly("write")
+@learned
 def fill_by_row(row_text: str, value: str, frame: int = 0, index: int = 0) -> str:
     """Sətirdəki mətnə (məs. 'Contact Name', 'Name', 'Customer ID') görə həmin sətrin textbox-unu doldurur."""
     box = _row_textbox(_frame(frame), row_text, index)
@@ -809,6 +1027,7 @@ def fill_nth(index: int, value: str, frame: int = 0) -> str:
 @mcp.tool()
 @pw
 @prod_readonly("write")
+@learned
 def type_text(row_text: str, value: str, frame: int = 0, index: int = 0, delay_ms: int = 40) -> str:
     """Sətir mətninə görə sahəyə hərf-hərf yazır (fill işləməyən sahələr üçün)."""
     box = _row_textbox(_frame(frame), row_text, index)
@@ -2130,6 +2349,46 @@ def recipe_run(name: str, stop_on_error: bool = True, allow_confirm: bool = Fals
                 out.append("Dayandırıldı (stop_on_error=True).")
                 break
     return "\n".join(out)
+
+
+@mcp.tool()
+@pw
+def learn_report(min_ms: int = 0, only_problems: bool = True, target: str = "", forget: bool = False) -> str:
+    """Öyrənən element yaddaşı (src/state/element_memory.json): hər element üçün çağırış sayı, uğursuz sayı,
+    orta/maks ms, işləyən klik üsulu, öyrənilmiş frame, son xəta.
+    only_problems=True: yalnız YAVAŞ (orta >= min_ms, default PORTAL_SLOW_MS=3000) və ya ALINMAYAN elementlər.
+    target: yalnız adında bu mətn olanlar. forget=True: target-ə uyğun qeydləri SİLİR (səhv öyrənilibsə).
+    Kodda daimi düzəliş lazım olanda (məs. həmişə fallback-ə düşən element) bu hesabata baxın."""
+    d = _mem_data()
+    keys = [k for k in d if not target or target.lower() in k.lower()]
+    if forget:
+        if not target:
+            return "forget=True üçün target verin (hamısını silmək üçün faylı əl ilə silin)."
+        for k in keys:
+            d.pop(k, None)
+        _mem_save()
+        return f"Silindi: {len(keys)} qeyd."
+    lim = min_ms or SLOW_MS
+    rows = []
+    for k in keys:
+        e = d[k]
+        slow, bad = e.get("avg_ms", 0) >= lim, e.get("fail", 0) > 0
+        fb = e.get("method") in ("force", "control")
+        if only_problems and not (slow or bad or fb or e.get("frames")):
+            continue
+        flags = ",".join(x for x, c in (("YAVAŞ", slow), ("XƏTA", bad), ("FALLBACK", fb),
+                                        ("FRAME", bool(e.get("frames")))) if c)
+        rows.append((e.get("avg_ms", 0), f"{k} | {e.get('n')}x, {e.get('fail')} xəta | orta {e.get('avg_ms')} ms, "
+                     f"maks {e.get('max_ms')} ms | {flags} | üsul={e.get('method', '')} "
+                     f"{('frames=' + str(e['frames'])) if e.get('frames') else ''} "
+                     f"{('| son xəta: ' + e['last_err']) if e.get('last_err') else ''}".rstrip()))
+    if not rows:
+        return f"Problem yoxdur ({len(d)} element yaddaşda)." if only_problems else "Yaddaş boşdur."
+    rows.sort(key=lambda r: -r[0])
+    return f"{len(rows)}/{len(d)} element (alət|hədəf|rol|nth):\n" + "\n".join(r[1] for r in rows[:80])
+
+
+_NO_REC.add("learn_report")
 
 
 # ======================================================================

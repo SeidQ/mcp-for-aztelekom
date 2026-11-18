@@ -167,16 +167,46 @@ def person_mail(name, problems, include_warnings, unknown=False):
     n = len(problems)
     intro = (f"<p>Müəllifi kontakt siyahısında tapılmayan {n} defekt template-ə uyğun deyil "
              f"(<b>{html.escape(name)}</b>). Zəhmət olmasa müəllifə ötürün.</p>" if unknown else
-             f"<p>Salam, {html.escape(name)}!</p><p>Açdığınız <b>{n}</b> defekt bug template-ə uyğun deyil. "
+             f"<p>Salam, {html.escape(name)}!</p><p>Açdığınız <b>{n}</b> defekt bug template-ə və ya tip qaydasına (Aztelekom Bug) uyğun deyil. "
              "Zəhmət olmasa aşağıdakıları düzəldin:</p>")
-    tail = ("<p style='color:#666'>Məcburi bölmələr: Description / Symptom, Preconditions, STR, "
+    tail = ("<p style='color:#666'>Məcburi bölmələr: Description / Symptom, STR, "
             "Expected Result, Actual Result, Screenshots / Attachments. Severity və Found In Environment "
-            "doldurulmalı, başlıqdakı [PROD]/[PREPROD] teqi ilə uyğun olmalıdır.<br>"
+            "doldurulmalı, başlıqdakı [PROD]/[PREPROD]/[STG] teqi ilə uyğun olmalıdır.<br>"
             "Bu mesaj avtomatik göndərilib (TFS defect monitor).</p>")
-    subject = f"[TFS] {n} defektiniz template-ə uyğun deyil" if not unknown else f"[TFS] {n} defekt: müəllif naməlum"
+    subject = f"[TFS] {n} defektiniz düzəliş tələb edir (template / tip)" if not unknown else f"[TFS] {n} defekt: müəllif naməlum"
     body = (f"<html><body style='font-family:Segoe UI,Arial;font-size:13px'>{intro}"
             f"{table_html(problems, include_warnings)}{tail}</body></html>")
     return subject, body
+
+
+def wrong_type_mail(name, items, unknown=False):
+    n = len(items)
+    rows = "".join(
+        f"<tr><td><a href='{html.escape(p['url'])}'>#{p['id']}</a></td><td>{html.escape(p['title'])}</td>"
+        f"<td>{html.escape(p['type'])}</td><td>{html.escape(p['state'])}</td></tr>" for p in items)
+    table = ("<table border='1' cellpadding='5' cellspacing='0' style='border-collapse:collapse;"
+             "font-family:Segoe UI,Arial;font-size:13px'><tr style='background:#C00000;color:#fff'>"
+             "<th>ID</th><th>Title</th><th>Type</th><th>State</th></tr>" + rows + "</table>")
+    intro = (f"<p>Müəllifi kontakt siyahısında tapılmayan {n} defekt yanlış tipdə açılıb "
+             f"(<b>{html.escape(name)}</b>). Zəhmət olmasa müəllifə ötürün.</p>" if unknown else
+             f"<p>Salam, {html.escape(name)}!</p><p>Açdığınız <b>{n}</b> defekt yanlış tipdə (<b>Bug</b>) açılıb.</p>")
+    subject = f"[TFS] {n} defekt yanlış tipdə açılıb (Bug əvəzinə Aztelekom Bug olmalıdır)"
+    body = (f"<html><body style='font-family:Segoe UI,Arial;font-size:13px'>{intro}{table}"
+            "<p>Defektlər <b>Aztelekom Bug</b> tipində açılmalıdır. Zəhmət olmasa düzgün tipdə yenidən açın "
+            "(və ya tipi dəyişin).</p><p style='color:#666'>Bu mesaj avtomatik göndərilib (TFS defect monitor).</p>"
+            "</body></html>")
+    return subject, body
+
+
+def wrong_type_defects(since):
+    """since (UTC datetime) tarixindən sonra açılmış, tipi yalnız 'Bug' olan (Aztelekom Bug deyil) açıq defektlər."""
+    q = ("SELECT [System.Id] FROM WorkItems WHERE [System.TeamProject] = @project "
+         "AND [System.WorkItemType] = 'Bug' "
+         "AND [System.State] NOT IN ('Closed', 'Done', 'Removed') "
+         f"AND [System.CreatedDate] >= '{(since - dt.timedelta(days=1)).date().isoformat()}' "
+         "ORDER BY [System.CreatedDate] ASC")
+    rows = T._run_wiql(q, 500)
+    return [r for r in rows if r["created"] and dt.datetime.fromisoformat(r["created"]) > since]
 
 
 # ---------------------------------------------------------------- senders
@@ -331,6 +361,9 @@ def main():
     ap.add_argument("--to-me", action="store_true")
     ap.add_argument("--since", default="", help="Bakı vaxtı, YYYY-MM-DD HH:MM")
     ap.add_argument("--remind-ids", default="", help="artıq mail göndərilmiş defekt id-ləri (vergüllə)")
+    ap.add_argument("--only-wrong-type", action="store_true",
+                    help="yalnız yanlış tip (Bug) bildirişlərini göndər, template/xatırlatma maillərini yox")
+    ap.add_argument("--no-wrong-type", action="store_true", help="yanlış tip (Bug) bildirişini göndərmə")
     a = ap.parse_args()
     if a.remind_ids:
         data = load_state()
@@ -351,9 +384,30 @@ def main():
     report, _ = T.run_validation(since=since_s)          # tfs-defects alətinin markerinə toxunmur
     include_w = env("MONITOR_INCLUDE_WARNINGS") == "1"
     bad = [p for p in report["problems"] if p["status"] == "error" or (include_w and p["status"] == "warning")]
+    if a.only_wrong_type:
+        bad = []
+    # Yanlış tipdə (Bug, Aztelekom Bug əvəzinə) açılmış defektlər: eyni cədvələ əlavə sətir kimi qoşulur
+    try:
+        wrong = [] if a.no_wrong_type else wrong_type_defects(since)
+    except Exception as e:
+        wrong = []
+        log(f"  YANLIŞ TİP YOXLAMASI XƏTASI: {e}")
+    type_issue = {"level": "error", "message": "Defekt yanlış tipdə (Bug) açılıb: Aztelekom Bug olmalıdır"}
+    by_id = {p["id"]: p for p in bad}
+    for w in wrong:
+        if w["id"] in by_id:
+            by_id[w["id"]]["issues"].append(type_issue)
+        else:
+            bad.append({"id": w["id"], "title": w["title"], "url": w["url"], "state": w["state"],
+                        "severity": {"value": w.get("severity") or ""}, "issues": [type_issue],
+                        "status": "error", "wrong_type_only": True})
+    log(f"  yanlış tipdə (Bug) açılmış: {len(wrong)}")
     log(f"Pəncərə {window}: yoxlanıldı {report['checked']}, göndəriləcək {len(bad)}")
 
-    reminders, fixed = reminder_candidates({p["id"] for p in bad}, started, include_w)
+    if a.only_wrong_type:
+        reminders, fixed = [], []
+    else:
+        reminders, fixed = reminder_candidates({p["id"] for p in bad}, started, include_w)
     if fixed and not a.dry_run:
         drop_sent(fixed)
         log(f"  düzəldilib / bağlanıb, xatırlatma dayandı: {', '.join('#' + str(i) for i in fixed)}")

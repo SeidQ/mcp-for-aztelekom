@@ -20,6 +20,15 @@
       ]
     },
     {
+      "key": "stg",
+      "tfs_values": [
+        "STG"
+      ],
+      "title_tags": [
+        "[STG]"
+      ]
+    },
+    {
       "key": "dr",
       "tfs_values": [
         "DR"
