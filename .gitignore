@@ -34,3 +34,8 @@ tests/bss_api/results/
 .update.lock/
 .update.log
 .no-autoupdate
+
+# Defect monitor: only on the owner's machine
+scripts/install_monitor_task.bat
+scripts/run_monitor*.bat
+src/defect_monitor.py
